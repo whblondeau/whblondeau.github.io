@@ -43,6 +43,10 @@
     	text-decoration: underline;
     	font-weight: bold;
     }
+    .banner
+    {
+      color: #772200;
+    }
     h2
     {
         border-style: solid;
