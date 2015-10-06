@@ -54,5 +54,13 @@
     {
     	margin-top: 0.5em;
     }
+    
+    .notice
+    {
+    	font-style: italic;
+    	font-variant: small-caps;
+    	font-weight: bold;
+    	color: #22aa22;
+    }
         
 
