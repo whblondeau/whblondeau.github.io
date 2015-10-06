@@ -68,4 +68,8 @@
     	font-size: larger;
     }
         
-
+    .instruct
+    {
+      font-style: italic;
+      font-size: smaller;
+    }
