@@ -1,88 +1,128 @@
 <html>
 <head>
 	<title>Bill Blondeau, Developer</title>
-	<style>
-		body 
-		{
-			margin: 30px 20px;
-			font-family: "Trebuchet MS", Helvetica, sans-serif;
-		}
-		p.contact-info 
-		{
-			margin: 0em 2em;
-			font-style: italic;
-		}
-		a:link
-		{
-			margin-top: .5em;
-			margin-bottom: .5em;
-		}
-		.explanation
-		{
-			font-size: 11pt;
-			font-style: italic;
-			font-weight: normal;
-		}
-		h2
-		{
-			border-style: solid;
-			border-width: 1px 0 0 0;
-			padding-top: 0.4em;
-			margin-top: 1.6em;
-		}
-	</style>	
+	<link rel='stylesheet' type='text/css' href='../css/common.css'/>	
 </head>
 <body>
-	<h1>Bill Blondeau Resume</h1>
-	<p class='contact-info'>Bill Blondeau</p>
-	<p class='contact-info'>122 N. 6th St.</p>
-	<p class='contact-info'>Madison, WI 53704</p>
-	<p class='contact-info'><a href='mailto:whblondeau.com'>whblondeau@gmail.com</a></p>
-	<p class='contact-info'>References upon request.</p>
+	<div class='wrapper'>
+		<p>
+		<a href='http://billblondeau.com'>billblondeau.com</a> home
+		</p>
+		<hr/>
+		<h1>Bill Blondeau Resum&#x00E9;: Software Developer &amp; Architect</h1>
+		<div class='contact-info'>
+			<p>Bill Blondeau</p>
+			<p>122 N. 6th St.</p>
+			<p>Madison, WI 53704</p>
+			<p><a href='mailto:whblondeau.com'>whblondeau@gmail.com</a></p>
+			<p><a href='http://billblondeau.com'>http://billblondeau.com</a></p>
+			<p>References upon request.</p>
+		</div>
 
-	<p class='summary'>Full-stack Developer, Information Architect, Technical Writer.<br/>Twenty years of professional and entrepreneurial experience.</p>
+		<p>Full-stack Developer, Information Architect, Technical Writer.<br/>Twenty years of professional and entrepreneurial experience.</p>
 
-	<h2>Strong Expertise <span class='explanation'></h2>
-	<p class='explanation'>Working with these, I will hit the ground running.</p>
-	<ul>
-		<li>Web development (HTTP, HTML5, CSS).</li>
-		<li>Python.</li>
-		<li>Java.</li>
-		<li>Web service design / implementation (especially REST)</li>
-		<li>Relational databases / SQL / DDL.</li>
-		<li>All things XML (Xpath, XSLT, XQuery, XML Schema).</li>
-		<li>Technical writing / Documentation.</li>
-		<li>Semantic Web.</li>
-		<li>Data Management / Governance.</li>
-		<li>Unix / Linux command line.</li>
-		<li>Git version control.</li>
-		<li>Behavior Driven Development.</li>
-	</ul>
-	<h2>Sufficient Experience / Ability</h2>
-	<p class='explanation'>I have adequate knowledge of these, but it's either outdated or incomplete. Would probably need ramp-up / refresher study.</p>
-	<ul>
-		<li>JavaScript language and Frameworks.</li>
-		<li>Java Frameworks.</li>
-		<li>PHP</li>
-		<li>Test Driven Development.</li>
-	</ul>
-	<h2>Current Studies</h2>
-	<p class='explanation'>Better at these than I was last week; eager to learn more.</p>
-	<ul>
-		<li>Clojure, and Lisps in general.</li>
-		<li>Geospatial work (Leaflet, OpenLayers).</li>
-		<li>JavaScript.</li>
-		<li>Elm.</li>
-	</ul>
-	<h2>Employment History</h2>
-	<ul>
-		<li><a href='http://cida.usgs.gov/'>Us Geological Survey, Center for Information and Data Analysis</a>: Feb 2013 &mdash; April 2015</li>
-		<li><a href='http://bendyworks.com'>Bendyworks Inc</a>: June 2012 &mdash; Dec 2012</li>
-		<li><a href='http://beacontechinc.com'>Beacon Technologies Inc</a>: September 2000 &mdash; March 2012</li>
-		<li>Keane Inc (now a subsidiary of <a href='http://americas.nttdata.com/Services/Services.aspx'>NTT DATA</a>): May 2000 &mdash; August 2000</li>
-		<li><a href='http://www.capgemini.com/'>Cap Gemini Inc</a>: June 1999 &mdash; May 2000</li>
-		<li>InterMedia LLC (now <a href='http://www.infinitecampus.com/'>Infinite Campus</a>): May 1997 &mdash; May 1999</li>
-		<li>Proprietor, Virtual Territories Technical Documentation services: 1994 &mdash; 1996</li>
-	</ul>
+    <h2>Kind of programmer I am</h2>
+    <p class='explanation'>This is sort of a fifty thousand foot view of how I roll, professionally. I think it's more meaningful for a prospective employer than the technical details listed down below; YMMV, of course.</p>
+    <ul>
+      <li>Treating coworkers with respect is more important than winning the language war or platform war or the struggle over paradigm.</li>
+      <li>Everybody underestimates the impact of technical debt. I fight for technical debt awareness.</li>
+      <li>I believe code is read more often than it's written, so clarity pays off. <strong>I document my projects and comment my code.</strong></li>
+      <li>I believe testing is a three-legged stool:
+        <ul>
+          <li>Behavioral or definitional testing that defines the application;</li>
+          <li>unit testing;</li>
+          <li>proper functional composition of tested units.</li>
+        </ul>
+      </li>
+      <li>I'd rather design my way out of a code problem than code my way out of a design problem.</li>
+      <li>I'll take declarative over imperative, whenever I can get it.</li>
+      <li>Strict functional programming is probably the most underrated paradigm available to us.</li>
+      <li>I like peer review and I want it. Yeah, everybody's busy, but I want it.</li>
+      <li>I like pair programming.</li>
+      <li>I dislike stunt coding, and try to avoid it even when i'm feeling brisk.</li>
+      <li>Shop standards are good; I comply with them. Even when they are not the way I'd prefer to do it. Abrogating shop standards just introduces static and increases misunderstanding.</li>
+      <li>Mentoring is good. Whether giving or receiving.</li>
+      <li>When I worked as a consultant, I gradually realized that there are two general kinds of consultants: the kind that hoards knowledge in order to become indispensable, and the kind that gives knowledge away with both hands so as to be freed up for the next cool thing. Three guesses which way I went... I never looked back. I help my coworkers learn anything they want to learn.</li>
+    </ul>
+
+		<h2>Kinds of work I do</h2>
+    <p class='explanation'>Of course I will do other kinds of work. These are things I'm particularly good with, or interested in.</p>
+		<ul>
+			<li>Web Development.</li>
+			<li>Web Service design including microservices architecture.</li>
+			<li>Relational databases / SQL / DDL.</li>
+			<li>REST / Hypermedia APIs.</li>
+			<li>Back-end work in Java and Python.</li>
+			<li>Data Management and Governance.</li>
+			<li>Technical writing / Documentation.</li>
+			<li>Semantic Web / RDF.</li>
+			<li>Data Management / Governance.</li>
+			<li>Behavior Driven Development.</li>
+      <li>Geospatial Programming.</li>
+    </ul>
+
+    <h2>Languages</h2>
+    <ul>
+      <li>English.</li>
+      <li>Python.</li>
+      <li>Java.</li>
+			<li>XML (Xpath, XSLT, XQuery, XML Schema, SAX).</li>
+      <li>SQL and DDL.</li>
+      <li>HTML5 / XHTML / HAML.</li>
+      <li>CSS3 / SASS.</li>
+      <li>JavaScript.</li>
+      <li>Gherkin.</li>
+      <li>Regular Expressions.</li>
+      <li>PHP.</li>
+    </ul>
+
+    <h2>Development Tools</h2>
+    <p class='explanation'>I use others, and have seldom had a difficult time learning any needed tool. These are the ones I know well, right now.</p>
+    <ul>
+			<li>Unix / Linux command line.</li>
+			<li>Git version control.</li>
+			<li>vim.</li>
+			<li>oXygen XML editor.</li>
+			<li>Eclipse IDE.</li>
+      <li>jEdit.</li>
+    </ul>
+
+    <h2>Frameworks, servers, libraries, and utilities</h2>
+    <p class='explanation'>Some of the most useful and/or interesting things I'm familiar with.</p>
+    <ul>
+      <li>Apache Tomcat.</li>
+			<li>Apache Cocoon.</li>
+      <li>Cucumber and Lettuce BDD frameworks.</li>
+      <li>Nagios system/network monitor.</li>
+      <li>Django.</li>
+      <li>Flask.</li>
+      <li>Python <em>Requests</em> HTTP Client.</li>
+		</ul>
+		
+		<h2>Current Studies</h2>
+		<p class='explanation'>Better at these than I was last week; eager to learn more.</p>
+		<ul>
+			<li>Clojure, and Lisps in general.</li>
+			<li>Geospatial work (Leaflet, OpenLayers).</li>
+			<li>JavaScript.</li>
+			<li>Elm.</li>
+		</ul>
+		
+		<h2>Project History</h2>
+		<p>
+		My <a href='http://billblondeau.com/project_hist/software_project_history.htm' target='_new'>software project history</a> is separately published because it's long and detailed.
+		</p>
+		
+		<h2>Employment History</h2>
+		<ul>
+			<li><a href='http://cida.usgs.gov/'>Us Geological Survey, Center for Information and Data Analytics</a>: Feb 2013 &mdash; April 2015</li>
+			<li><a href='http://bendyworks.com'>Bendyworks Inc</a>: June 2012 &mdash; Dec 2012</li>
+			<li><a href='http://beacontechinc.com'>Beacon Technologies Inc</a>: September 2000 &mdash; March 2012</li>
+			<li>Keane Inc (now a subsidiary of <a href='http://americas.nttdata.com/Services/Services.aspx'>NTT DATA</a>): May 2000 &mdash; August 2000</li>
+			<li><a href='http://www.capgemini.com/'>Cap Gemini Inc</a>: June 1999 &mdash; May 2000</li>
+			<li>InterMedia LLC (now <a href='http://www.infinitecampus.com/'>Infinite Campus</a>): May 1997 &mdash; May 1999</li>
+			<li>Proprietor, Virtual Territories Technical Documentation services: 1994 &mdash; 1996</li>
+		</ul>
+	</div>
 </body>
 </html>
