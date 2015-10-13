@@ -29,6 +29,11 @@
         text-decoration: underline;
     }
 
+    code
+    {
+        font-size: larger;
+    }
+
 
 
     /* semantic css */
