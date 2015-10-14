@@ -1,0 +1,53 @@
+Bill Blondeau Resumé: Technical Writer
+(live copy of this resumé at http://billblondeau.com/techwriter/index.htm)
+
+122 N. 6th St.
+Madison, WI 53704
+whblondeau@gmail.com
+http://billblondeau.com
+References upon request.
+
+Twenty years of professional and entrepreneurial experience as Technical Writer, Analyst, Information Architect, Programmer. Strong interest in Semantics, Complex Systems, language design, and—always—documentation.
+
+Technical Illustrator: system, process, and information topology diagrams.
+
+Enough math and science to keep up.
+
+
+My basic Technical Writing praxis is described at:
+http://billblondeau.com/techwriter/good_technical_writing.htm
+
+Portfolio of written work:
+http://billblondeau.com/techwriter/portfolio.htm
+
+
+Technical Writing Competencies
+
+    Content
+    Editing
+    Revision cycle
+    Proofreading
+    Critiques & evaluations
+    Training other writers
+
+Supporting Documentation Competencies
+
+    Business and technical analysis
+    Diagramming / data visualization
+    Workflow definition and design
+    Semantic Web languages and technologies
+    Data Architecture
+    Utility programming
+
+
+Employment History
+
+    Freelance Technical and Fiction Writer: April 2015 — present
+    US Geological Survey, Center for Integrated Data Analytics: Feb 2013 — April 2015
+    Bendyworks Inc: June 2012 — Dec 2012
+    Beacon Technologies Inc: September 2000 — March 2012
+    Keane Inc (now a subsidiary of NTT DATA): May 2000 — August 2000
+    Cap Gemini Inc: June 1999 — May 2000
+    InterMedia LLC (now Infinite Campus): May 1997 — May 1999
+    Proprietor, Virtual Territories Technical Documentation services: 1994 — 1996
+
