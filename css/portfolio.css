@@ -1,0 +1,17 @@
+
+    ul.portfolio_pieces > li
+    {
+        margin-bottom: 2em;
+    }
+
+    ul.portfolio_pieces > li > p
+    {
+        line-height: 1.5;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }    
+    
+    ul.portfolio_pieces > li > p:first-child
+    {
+        font-weight: bold;
+    }
