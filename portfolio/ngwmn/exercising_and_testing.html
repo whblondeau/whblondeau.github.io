@@ -1,0 +1,528 @@
+<html>
+<head>
+    <title>Exercising and Testing the NGWMN</title>
+    <link rel='stylesheet' type='text/css' href='css/documentation.css' />
+</head>
+<body>
+    <div id='navbar'>
+        <p><a href='index.html'>Technical Documentation Project: NGWMN at USGS/CIDA</a></p>
+        <hr/>
+        <p><a href='parts_of_ngwmn.html'>The Parts of the NGWMN</a></p>
+        <p><a href='cocoon_and_mediator.html'>Cocoon and Mediator Technical Overview</a></p>
+        <p><a href='data_and_service_definitions.html'>Data and Service Definitions</a></p>
+        <p>Exercising and Testing the NGWMN</p>
+    </div>
+    
+    <div id='envelope'>
+        <div id='content'>
+        
+        
+            <a name='exercising_and_testing'></a>
+            <h1 class='pagetitle'>Exercising and Testing the NGWMN</h1>
+            <div id='toc'>
+                <p class='indent_1'><a href='#three_basic_params'>The 3 basic parameters</a></p>
+                <p class='indent_1'><a href='#dashboard'>The NGWMN Data Cache Dashboard</a></p>
+                <p class='indent_1'><a href='#mediator'>Mediator</a></p>
+                <p class='indent_2'><a href='#howto_get_mediator_well_result'>How do I get a Mediator <strong>result</strong> for a particular service for a particular well?</a></p>
+                <p class='indent_2'><a href='#howto_get_mediator_input'>How do I get the <strong>input information to</strong> the Mediator for a particular service for a particular well?</a></p>
+                <p class='indent_2'><a href='#howto_get_original_source_data'>How do I get the <strong>original source data</strong> from the provider agency for a particular service for a particular well?</a></p>
+                <p class='indent_2'><a href='#howto_do_regression_test'>How do I do a <strong>Regression Test</strong> on the Mediator?</a></p>
+                <p class='indent_3'><a href='#regression_test_howto'>A quick regression test HOWTO</a></p>
+                <p class='indent_4'><a href='#installing_regression_test_osx'>Installing the required libraries on OS X via Homebrew</a></p>
+                <p class='indent_3'><a href='#parts_of_regression_test'>The parts of the regression test: what they are and how to use them</a></p>
+                <p class='indent_4'><a href='#get_well_data.py'>get-well-data.py</a></p>
+                <p class='indent_4'><a href='#parse_well_list.py'>parse-well-list.py</a></p>
+                <p class='indent_4'><a href='#ref.zip'>ref.zip</a></p>
+                <p class='indent_4'><a href='#wells.txt'>wells.txt</a></p>
+                <p class='indent_4'><a href='#quick_scan_new_results.py'>quick-scan-new-results.py</a></p>
+                <p class='indent_4'><a href='#test_config.txt'>test-config.txt</a></p>
+                <p class='indent_3'><a href='#other_regression_test_artifacts'>Other things that are not in source control, but that may show up in the regression test directory:</a></p>
+                <p class='indent_3'><a href='#folder_structure_regression_data'>The folder structure of regression data</a></p>
+                <p class='indent_1'><a href='#ngwmn_cache'>NGWMN Cache</a></p>
+                <p class='indent_2'><a href='#howto_get_cache_data'>How do I get the actual data stored in the Cache for a particular service for a particular well?</a></p>
+                <p class='indent_2'><a href='#howto_force_prefetch'>How do I force a data prefetch for a particular well?</a></p>
+                <p class='indent_2'><a href='#howto_cache_ajax'>How do I find out what the Cache sends to the Web App via AJAX for a particular well?</a></p>
+            </div>
+
+            <p>
+            NGWMN is composed of multiple components that interact in ways that are obvious, and ways that are not obvious.
+            </p>
+            <p>This page contains explanations, specifications, procedures, tips, tricks, folklore, and arcane voodoo rituals that can help a developer exercise the pieces correctly.
+            </p>
+
+
+            <a name='three_basic_params'></a>
+            <h1>The 3 basic parameters</h1>
+            <p>
+            For any kind of work with NGWMN, you will typically need to know three bits of info:
+            </p>
+            <ul>
+                <li>The <strong><a href='data_and_service_definitions.html#service_alias'><span class='service-alias'>service-alias</span></a>,</strong> which defines which service you're calling.</li>
+                <li>The <strong><a href='data_and_service_definitions.html#agency_alias'><span class='agency-alias'>agency-alias</span></a>,</strong> which identifies the source from which the Mediator gets its data.</li></ul><ul>
+                <li>The <strong><a href='data_and_service_definitions.html#site_id'><span class='site-id'>site_id</span></a>,</strong> which is the agency's identifier for the well.</li>
+            </ul>
+            <p>
+            <em>Note that these parameters are actually named different things in different parts of the app and for different data. &nbsp;For instance, for the SOS data service from the Mediator, <span class='site_id'>site_id</span>&nbsp;is called <strong>featureId</strong>, for QW data it is called <strong>siteid</strong>.</em> These variations are <a href='data_and_service_definitions.html#ngwmn_data_defs'>described</a> on the NGWMN Data and Service Definitions page.
+            </p>
+ 
+            
+            <a name='dashboard'></a>
+            <h1>The NGWMN Data Cache Dashboard</h1>
+            <p>
+            <strong>This is the place to go to:</strong>
+            </p>
+            <ul>
+                <li>Find out <strong>what wells are available for the NGWMN on your server.</strong></li>
+                <li>View metadata about <strong>the Cache and the prefetch operations</strong> that populate it.</li>
+                <li><strong>Manually execute a <a href='data_and_service_definitions.html#prefetch'>prefetch service call</a></strong> to refresh Cache Data for a particular well, for a particular service.</li>
+            </ul>
+            <p>
+            To get there, go to <strong>&lt;your server's hostname and port&gt;/<span class='redacted'>&nbsp;Context redacted&nbsp;</span>.</strong>
+            </p>
+            <p>
+            For example, for the dev server: http:<span class='redacted'>&nbsp;Hostname redacted&nbsp;</span>/<span class='redacted'>&nbsp;Context redacted&nbsp;</span>.
+            </p>
+            <p>
+            This gets you to a display page that lets you access wells, and metatdata about cache prefetch operations.
+            </p>
+            <p>
+            The most useful links are:
+            </p>
+            <ul>
+                <li><span class='fakelink'>Well List</span> <em><span class='digression'>(complete flat list of wells on the NGWMN server)</span></em></span></li>
+                <li>Well Prefetch by Agency <em><span class='digression'>(wells grouped by providing agency)</span></em>
+                    <ul class='fakelink'>
+                        <li>Prefetch list for IL EPA</li>
+                        <li>Prefetch list for MPCA</li>
+                        <li>Prefetch list for ISWS</li>
+                        <li>Prefetch list for NJGS</li>
+                        <li>Prefetch list for MN DNR</li>
+                        <li>Prefetch list for TWDB</li>
+                        <li>Prefetch list for MBMG</li>
+                        <li>Prefetch list for USGS</li>
+                    </ul>
+                </li>
+            </ul>
+            <p>
+            The cache can only access wells that are listed in the Well Registry, which is a separately managed component. The Well Registry varies by tier: the Dev and QA registries (and thus those caches) do not contain all the wells. I think this is by design so that the non-production servers do not use so much storage and/or are easier to test. If you are trying to diagnose a problem w/ a particular well in production, it may not be possible to access it on Dev or QA.
+            </p>
+ 
+ 
+ 
+            <a name='mediator'></a>
+            <h1>Mediator</h1>
+            <p>
+            The Mediator is an Apache Cocoon application, which means that <strong>it's a set of processing <em>pipelines</em> that are mapped to characteristics of an HTTP Request.</strong> The output of the selected pipeline is used to generate the corresponding HTTP Response. See the <a href='cocoon_and_mediator.html'>Cocoon and Mediator Technical Overview</a> for more detailed information.
+            </p>
+            <p>
+            The one most important thing you need to know about the Mediator: <span class='notable'><span class='redacted'>&nbsp;Context redacted&nbsp;</span>/sitemap.xmap</span>.
+ Application logic is defined in Cocoon by <span class='notable'>sitemap.xmap</span>, which declaratively describes the Request matches and the structures of pipelines. <span class='notable'>sitemap.xmap</span> files are distributed recursively in Cocoon. Fortunately, the Mediator's logic is defined in a single <span class='notable'>sitemap.xmap</span> file. See 
+            </p>
+            
+            
+            <a name='howto_get_mediator_well_result'></a>
+            <h2>How do I get a Mediator <strong>result</strong> for a particular service for a particular well?</h2>
+            <p>
+            Use the <a href='data_and_service_definitions.html#core_service_apis'>Core Service APIs</a>.
+            </p>
+            <p>
+            The Core Service APIs include the way to call the Mediator directly.</p>
+            
+            
+            <a name='howto_get_mediator_input'></a>'
+            <h2>How do I get the <strong>input information to</strong> the Mediator for a particular service for a particular well?</h2>
+            <p>
+            <span class='notable'>Source view</span>, documented <a href='data_and_service_definitions.html#source_view'>here</a>, is a Mediator Specialty Service that uses the <span class='notable'>'cocoon-view=source'</span> flag on a mediator request.
+            </p>
+            
+            
+            <a name='howto_get_original_source_data'></a>
+            <h2>How do I get the <strong>original source data</strong> from the provider agency for a particular service for a particular well?</h2>
+            <p>
+            This is unfortunately a bit harder. Go to <span class='redacted'>&nbsp;Context redacted&nbsp;</span>/sitemap.xmap and look up the web service call listed there. &nbsp;You will have to piece together the appropriate url using the logic in the xmap file. Unless you are paranoid or have reason to suspect something weird is happening, you should be able to use the <span class='notable'>'cocoon-view=source'</span> flag described above.</span>
+            </p>
+            
+            
+            <a name='howto_do_regression_test'></a>
+            <h2>How do I do a <strong>Regression Test</strong> on the Mediator?</h2>
+            <p>
+            A scripted Regression Test has been written for the Mediator. It is included in the Mediator source code <span class='redacted'>&nbsp;Internal Project redacted&nbsp;</span> in its own separate subfolder.</span>
+            </p>
+            <p>
+            The regression test is a <strong>brute force approach,</strong> which favors accumulating a lot of information as the default behavior, and allowing the tester to decide how, and how heavily, to inspect the new data. This approach is potentially very expensive in terms of time and server load. Therefore:
+            </p>
+            <ul>
+                <li><strong>The regression test is not intended for automated use.</strong> It should be executed by a human (preferably one who understands what s/he is doing.)</li>
+                <li><strong>The regression test should be used on the dev server</strong>, or perhaps QA; <em>never prod</em>
+ unless there's a sufficient reason for doing so. It's intended to catch regressions due to code changes, not server deployment errors.</li>
+            </ul>
+            <p>
+            The regression test works as follows:
+            </p>
+            <ol>
+                <li>There is a&nbsp;<strong>baseline or reference (aka "ref") dataset</strong> that contains all of the data for <strong>all</strong> of the wells, for <strong>all</strong> of the agencies, for <strong>each</strong> service that can be called. This is established once, and replaced only seldom. (The dev server uses a reduced dataset; it took ~ 1.5 hours to 
+get everything.) This is in a "ref" folder on the machine from which you are running the tests.</li>
+                <li>When you want to perform a regression test, you specify how much of the full
+ dataset you want to test. The parameters (set in a configuration file) are:
+                    <ol>
+                        <li>Which agencies</li>
+                        <li>Which services</li>
+                        <li>the maximum number of wells per agency.</li>
+                    </ol>
+                </li>
+                <li>Executing the regression test creates a test data folder (which can basically be named anything <em>except</em> "ref") containing the data.&nbsp;</li>
+                <li>The regression test offers a superficial canary-in-the-mine utility,&nbsp;quick-scan-new-results.py, that can quickly identify certain kinds of discrepancies. However, it also stores the messagebody of every successful(<strong>"successful" meaning HTTP status code &lt; 400</strong>) invocation. You can do what you like with those XML files: compare them with manual applications such as oXygen; script automated inventory using python, or command line with xmllint; do simple file compares; look at them in a text editor and gnaw your thumbnail; etc. It's up to you.</li>
+            </ol>
+            
+            
+            <a name='regression_test_howto'></a>
+            <h3>A quick regression test HOWTO</h3>
+            <p>
+            <strong><u>First:</u> Get the latest regression test code and data from source control.</strong> Note that, if <strong>ref.zip</strong> has changed, that will take a little extra time to download.
+            </p>
+            <p>
+            <strong><u>Next:</u> you will need to install Python and the 'requests' and 'lxml' Python modules.</strong>
+            </p>
+            
+            
+            <a name='installing_regression_test_osx'></a>
+            <h4>Installing the required libraries on OS X via Homebrew</h4>
+            <p>
+             If you have OS X with the <a href=https://github.com/Homebrew/homebrew' target='_blank'>Homebrew</a> package manager:
+             </p>
+            
+<!-- preformatted, so we outdent -->
+<div class='code console'><span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span> brew install python
+<span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span> brew link --overwrite python <span class='rem'>[Update the links from the system default Python]</span>
+<span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span> pip install requests
+<span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span> pip install lxml
+<span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span> python -V <span class='rem'>[Should return 2.7.5 or greater]</span>
+<span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span>
+
+</div>
+
+            <p>
+            <strong><u>Next:</u> Edit <span class='notable'>test-config.txt</span></strong> to set up your regression test. For example, if you wanted to test <span class='service-alias'>sos</span></strong> for <span class='agency-alias'>MBMG</span>, <span class='agency-alias'>USGS</span>, and <span class='agency-alias'>TWDB</span> only, and want <strong>no more than 15 wells per agency,</strong> you would edit as follows:
+            </p>
+            
+<!-- preformatted, so we outdent -->
+<div class='code textpage'>==========
+AGENCIES:
+<span class='rem'># This will determine which agencies you want the test to run against.
+# Just comment out the ones you do not want.
+#IL_EPA
+#ISWS</span>
+<strong>MBMG</strong>
+<span class='rem'>#MN_DNR
+#MPCA
+#NJGS</span>
+<strong>TWDB
+USGS</strong>
+
+==========
+SERVICES:
+<span class='rem'># This will determine which services you want to test.
+# Just comment out the ones you do not want.
+#qw</span>
+<strong>sos</strong>
+<span class='rem'>#wfs</span>
+
+==========
+MAX WELLS PER AGENCY:
+<span class='rem'># Each well, and its three service calls, will take time.
+# This config section allows you to restrict the number of wells so you
+# can run shorter regression tests.
+# If you supply multiple numbers, the script will take the last uncommented
+# one.
+# If you leave no number uncommented, the script will do ALL wells for all
+# selected agencies.</span>
+<strong>15</strong>
+</div>
+            
+            <p>
+            <strong><u>Next:</u></strong>&nbsp;Unzip the <span class='notable'>ref.zip</span> file into a folder of the same name (just <strong>ref</strong>).
+            </p>
+            <p>
+            <u><strong>Next:</strong></u> at the commandline, <strong>run <span class='notable'>get-well-data.py</span>:</strong>
+            </p>
+            <p>
+            Make sure the username &amp; password credentials have sufficient permissions to call the Mediator's web service endpoints. (hint: <span class='redacted'>&nbsp;Hint redacted&nbsp;</span>). Your <strong>selected name for an output subdirectory for the data</strong> can be any legal folder name, but <strong>must not already exist.</strong> To make a point, let's use "murgatroyd" in this example.
+            </p>
+<!-- preformatted, so we outdent -->
+<div class='code console'><span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span> python get-well-data.py &lt;user&gt; &lt;password&gt; murgatroyd
+<span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span>
+
+
+</div>            
+            
+            <p>
+            <u><strong>Next:</strong></u><strong> wait till it finishes.</strong> This one will be fast (it's configured for only 45 service calls, maximum: at most 15 for each of the three agencies). Note that the Response HTTP Status Code will be color-coded: anything &gt;= 400 will be <span class='red onblack'>&nbsp;red&nbsp;</span>, otherwise <span class='grn onblack'>&nbsp;green&nbsp;</span>.
+            </p>
+            <p>
+            <u><strong>Next:</strong></u><strong> See if there were any discrepancies in status or content-length.</strong> Run:</span>
+            </p>
+<!-- preformatted, so we outdent -->
+<div class='code console'><span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span> python quick-scan-new-results.py murgatroyd
+<span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span>
+
+
+</div>            
+            <p>
+            If everything thing is good, there will be no output. If there are a lot of discrepancies, you may want to rerun the scan and make a hard copy of the readout:
+            </p>
+<!-- preformatted, so we outdent -->
+<div class='code console'><span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span> python quick-scan-new-results.py murgatroyd &gt; omgomg_were_all_gonna_die.txt
+<span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span>
+
+
+</div>            
+            <p>
+            From this point forward, you can inspect the XML data for the pieces showing discrepancies (or, if you think it's warranted, for <em>all of the new data in murgatroyd,</em> even if it didn't trigger any discrepancies noted by 
+quick-scan-new-results.py.) Because this is simply text data (for the HTTP response header info) and XML (for the response message bodies) you can use any tools you please.
+            </p>
+            
+            
+            <a name='parts_of_regression_test'></a>
+            <h3>The parts of the regression test: what they are and how to use them</h3>
+            <p>
+            These are the code and data resources that you will see if you <strong>list the contents of the regression test directory:</strong>
+            </p>
+            
+            <a name='get_well_data.py'></a>
+            <h4>get-well-data.py</h4>
+            <p>
+            This is <strong>the main script of the regression test.</strong> It's the one that actually executes the HTTP calls and constructs the results folder.
+            </p>
+            <ul>
+                <li><strong>dependencies:</strong>
+                    <ul>
+                        <li>wells.txt</li>
+                        <li>test-config.txt</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <ul>
+                <li><strong>usage:</strong>
+                    <ul>
+                        <li><span class='notable'>python get-well-data.py username password newfoldername</span>
+                            <ul>
+                                <li><span class='notable'>username</span> and <span class='notable'>password</span> for any Tomcat account (e.g. <span class='redacted'>&nbsp;Example redacted&nbsp;</span>) that has sufficient permissions on the server.</li>
+                                <li><span class='notable'>newfoldername</span> is the name of the folder that will be created. You can call it pretty much anything - <strong>except "ref", which is a reserved foldername.</strong> Also, you need to delete any preexisting folder with that particular name. <span class='notable'>get-well-data.py</span> will <strong>not</strong> overwrite an existing result directory.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+                
+            <a name='parse_well_list.py'></a>
+            <h4>parse-well-list.py</h4>
+            <p>
+            This is <strong>the script that generated <span class='notable'>wells.txt</span>.</strong> It is also the one you would use to regenerate it if you want to change the list of wells. <span class='warning'><em><strong>Warning:</strong> if you decide to regenerate the list, <strong>you must also regenerate your ref directory.</strong> Which is expensive and time-consuming.</em></span>
+            </p>
+            <p>
+            So don't blow away the old one, if you still have it. Rename it or move it to protect it from being overwritten. (Of course, you can always get it out of source control.)
+            </p>
+            <ul>
+                <li><strong>usage:</strong>
+                    <ul>
+                        <li>python parse-well-list.py username password (host)
+                            <ul>
+                                <li><span class='notable'>username</span> and <span class='notable'>password</span> for any Tomcat account (e.g. <span class='redacted'>&nbsp;Example redacted&nbsp;</span>) that has sufficient permissions on the server.</li>
+                                <li>optional <span class='notable'>host</span> (defaults to <span class='redacted'>&nbsp;Host redacted&nbsp;</span>) is a url of the form <span class='notable'>http://hostname:port"</span>. Realistically, you won't use this unless you're setting up for a run against QA or (fate forfend) Prod.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            
+            
+            <a name='ref.zip'></a>
+            <h4>ref.zip</h4>
+            <p>This is <strong>the archive containing the official baseline data</strong> for comparison to your new run. <span class='warning'>Do not edit this file. <em>Ever</em>.</span> ...But if you do, decide whether to commit your changes (e.g., if it's intended to be only a local copy, be very careful to <strong>not</strong> commit your changes.)
+            </p>
+            <p>
+            Please remember that <strong>the ref data is server-specific.</strong>
+            </p>
+            <p>
+            <strong>If regenerating this data,</strong> here's your quick checklist:</p>
+            <ul>
+                <li>If you also plan to update <span class='notable'>wells.txt</span>, do that <em>first.</em></li>
+                <li>Make sure that <strong><span class='notable'>wells.txt</span> specifies the same server</strong> for which you will be doing the ref regeneration.</li>
+                <li>Think very carefully about the configuration entries you want in test-config.txt. <span class='warning'>You will be hating your life if you do a big long run without setting up the configuration correctly.</span></li>
+                <li>Remember, for a regeneration&mdash;an <strong>update of the baseline</strong>&mdash;you should commit your changes unless something awful happens.</li>
+            </ul>
+            <p>
+            Your regeneration operation should go like this:</p>
+            <ol>
+                <li>Edit <span class='notable'>test-config.txt</span> to ensure all agencies and services are uncommented, and that you do <strong>not</strong> have any uncommented number entry under MAX WELLS PER AGENCY. These things will ensure that <span class='notable'>get-well-data.py</span> will not exclude any wells.</li>
+                <li>Verify that you have the correct server selected in <span class='notable'>test-config.txt</span>.</li>
+                <li>Run <span class='notable'>get-well-data.py</span>. Pick a non-confusing folder name, like <strong>newref</strong>.</li>
+                <li>Go do something else. Have lunch, work on a different project, change the transmission in your car, something.</li>
+                <li>If it completes successfully, change the name of your target folder to <strong>ref/</strong>. <span class='warning'>And I <em>know</em> you verified that the content of <span class='notable'>ref</span> was backed up</span>. Say you started with <strong>newref</strong> as suggested above:
+<!-- preformatted, so we outdent -->
+<div class='code console'><span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span> rm ref
+<span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span> mv newref ref
+<span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span>
+
+</div>
+                <li>If you want to create a new <span class='notable'>ref.zip</span>, do this, or the moral equivalent of this:
+<!-- preformatted, so we outdent -->
+<div class='code console'><span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span> zip -r ref.zip ref/
+<span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span>
+
+
+</div>
+                </li>
+                <li><strong>If</strong> you intend for this new zipfile to replace its predecessor in source control, commit it right away, before you forget.</li>
+            </ol>
+            
+            <a name='wells.txt'></a>
+            <h4>wells.txt</h4>
+            <p>
+            This is <strong>the list of wells eligible for regression testing.</strong> It's a simple text file, in which each line represents a single well. Each line is of the form
+            </p>
+            <ul>
+                <li><code>agency_id|feature_id</code></li>
+            </ul>
+            <p>
+            and yes, that's a pipe character delimiter. Pipes pretty much never break, unless they get sideways with a regex. You're welcome.
+            </p>
+            <p>
+            <span class='warning'>Never edit this file.</span> Just regenerate it if you must; best is just to retrieve the old one from source control.
+            </p>
+                
+            <a name='quick_scan_new_results.py'></a>
+            <h4>quick-scan-new-results.py</h4>
+            <p>
+            This is a superficial check of an <span class='notable'>http.txt</span> file, comparing the new 
+regression test's HTTP responses against the matching HTTP Responses from <span class='notable'>ref/</span>. It will flag any well/service combination for which:
+            </p>
+            <ul>
+                <li>The <span class='notable'>HTTP Status Code</span> is different; or</li>
+                <li>The <span class='notable'>HTTP "content-length" header</span> shows a <strong>decrease</strong> in messagebody size in bytes.</li>
+            </ul>
+            <p>
+            This script writes its findings to stdout.</p>
+            <ul>
+                <li><strong>usage:</strong>
+                    <ul>
+                        <li><span class='notable'>python quick-scan-new-results.py newfoldername</span>
+                            <ul>
+                                <li><span class='notable'>newfoldername</span> is the local name of the folder in which you have stashed your regression results.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <p>
+            If you want to have a written record of the findings, just do
+            </p>
+<!-- preformatted, so we outdent -->
+<div class='code console'><span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span> python quick-scan-new-results.py newfoldername &gt; somefilename.txt
+<span class='grn'>&#x279C;</span> ~ <span class='grn'>$</span>
+
+
+</div>
+            <p>
+            <strong>Please,</strong> if you want to perform other HTTP-level checks, you can either write them into this script, or - probably safer - make a copy of this script with a different name and hack on that one. If you do add your new file to source control, don't forget to document it.
+            </p>
+            
+            <a name='test_config.txt'></a>
+            <h4>test-config.txt</h4>
+            <p>
+            <strong><span class='notable'>test-config.txt</span> is the config file that <span class='notable'>get-well-data.py</span> obeys.</strong>
+            </p>
+            <p><span class='warning'>The first rule of <span class='notable'>text-config.txt</span> is that <strong>you do not modify the header names.</strong></span> If you do, you will break <span class='notable'>get-well-data.py</span>, which is expecting those exact headers.
+            </p>
+            <p>
+            If you <strong>really really want to change a header,</strong> you should understand <span class='notable'>get-well-data.py</span> well enough to make corresponding changes there. And then test it thoroughly.
+            </p>
+            <p>
+            <span class='notable'>test-config.txt</span> provides the ability to configure the following characteristics of the get-well-data.py operation:
+            </p>
+            <ul>
+                <li><strong>HOST:</strong> the HTTP address of the server (dev, QA, prod) against which the regression test will be executed</li>
+                <li><strong>AGENCIES:</strong> the back-end data providers/owners against whom the regression tests will be run</li>
+                <li><strong>SERVICES:</strong> the services (currently available: 'qw', 'sos', 'wfs') against which the regression tests will be run</li>
+                <li><strong>MAX WELLS PER AGENCY:</strong> A limit on the number of wells, in any agency, whose data <span class='notable'>get-well-data.py</span> will attempt to obtain.</li>
+            </ul>
+            <p>
+            Specific directions about how to configure the different characteristics are written into the config file itself. Please keep this updated.
+            </p>
+            
+            <a name='other_regression_test_artifacts'></a>
+            <h3>Other things that are not in source control, but that may show up in the regression test directory:</h3>
+            <ul>
+                <li><strong>ref/:</strong> somebody unzipped <span class='notable'>ref.zip</span> here. Or accidentally named a different subdirectory "ref" because they were deeply confused.</li>
+                <li><strong>other directories:</strong> probably the results of regression test runs.</li>
+                <li><strong>files with content like this</strong> will be saved results of a <span class='notable'>quick-scan-new-results.py</span> run:
+                    <ul>
+                        <li>labrat/IL_EPA/P407875</li>
+                        <li>sos</li>
+                        <li>new data content-length is 760; reference data content-length was 766.</li>
+                    </ul>
+                </li>
+            </ul>
+                
+            <a name='folder_structure_regression_data'></a>
+            <h3>The folder structure of regression data</h3>
+            <p>
+            The internal structure of <span class='notable'>ref</span> and of your generated test data is the same:
+            </p>
+            <ul>
+                <li>test or reference folder
+                    <ul>
+                        <li>agency_id
+                            <ul>
+                                <li>feature_id
+                                    <ul>
+                                        <li>http.txt</li>
+                                        <li>qw.xml</li>
+                                        <li>sos.xml</li>
+                                        <li>wfs.xml</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <p>
+            In other words, your test data is grouped by agency, then by individual well; and for each well, there will be at least one file (<span class='notable'>http.txt,</span> which records the status and headers of the response for each HTTP 
+service call you attempted: win, lose, or draw) and possibly several more (for each <strong>successful</strong> response, an XML file holding the messagebody.)
+            </p>
+
+
+            <a name='ngwmn_cache'></a>
+            <h1>NGWMN Cache</h1>
+            
+            <a name='howto_get_cache_data'></a>
+            <h2>How do I get the actual data stored in the Cache for a particular service for a particular well?</h2>
+            <p>
+            Use the <a href='data_and_service_definitions.html#core_service_apis'>Core Service APIs</a>.
+            </p>
+            <p>
+            The Core Service APIs include the ways to call the Cache directly.
+            </p>
+            
+            
+            <a name='howto_force_prefetch'></a>
+            <h2>How do I force a data prefetch for a particular well?</h2>
+            <p>
+            There are two ways to do this:
+            </p>
+            <ol>
+                <li><strong>Manual:</strong> use the <a href='#dashboard'>NGWMN Data Cache Dashboard</a>.</li>
+                <li><strong>HTTP Service call (via command line or script):</strong> use the <a href='data_and_service_definitions.html#prefetch'>prefetch service</a>.</li>
+            </ol>
+            
+            <a name='howto_cache_ajax'></a>
+            <h2>How do I find out what the Cache sends to the Web App via AJAX for a particular well?</h2>
+            <p>
+            Use the <a href='data_and_service_definitions.html#ajax'>Direct AJAX Support for UI</a> service.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

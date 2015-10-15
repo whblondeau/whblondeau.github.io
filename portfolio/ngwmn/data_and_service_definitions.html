@@ -1,0 +1,416 @@
+<html>
+<head>
+    <title>Data and Service Definitions</title>
+    <link rel='stylesheet' type='text/css' href='css/documentation.css' />
+</head>
+<body>
+    <div id='navbar'>
+        <p><a href='index.html'>Technical Documentation Project: NGWMN at USGS/CIDA</a></p>
+        <hr/>
+        <p><a href='parts_of_ngwmn.html'>The Parts of the NGWMN</a></p>
+        <p><a href='cocoon_and_mediator.html'>Cocoon and Mediator Technical Overview</a></p>
+        <p>Data and Service Definitions</p>
+        <p><a href='exercising_and_testing.html'>Exercising and Testing the NGWMN</a></p>
+    </div>
+    
+    <div id='envelope'>
+        <div id='content'>
+
+            <h1 class='pagetitle'>NGWMN Data and Service Definitions</h1>
+            
+            <div id='toc'>
+                <p class='indent_1'><a href='#ngwmn_data_defs'>NGWMN Data Definitions</a></p>
+                <p class='indent_2'><a href='#agency_alias'>agency_alias</a></p>
+                <p class='indent_2'><a href='#service_alias'>service_alias</a></p>
+                <p class='indent_2'><a href='#site_id'>site_id</a></p>
+                <p class='indent_1'><a href='#general_service_semantics'>NGWMN General Service Semantics</a></p>
+                <p class='indent_2'><a href='#site_feature_service_semantics'>Site Feature Service</a></p>
+                <p class='indent_2'><a href='#water_quality_service_semantics'>Water Quality Service</a></p>
+                <p class='indent_2'><a href='#water_level_service_semantics'>Water Level Service</a></p>
+                <p class='indent_1'><a href='#core_service_apis'>Core Service APIs</a></p>
+                <p class='indent_2'><a href='#site_feature_service_apis'>Site Feature Service</a></p>
+                <p class='indent_2'><a href='#water_quality_service_apis'>Water Quality Service</a></p>
+                <p class='indent_2'><a href='#water_level_service_apis'>Water Level Service</a></p>               
+                <p class='indent_1'><a href='#specialty_service_apis'>Specialty Service APIs</a></p>
+                <p class='indent_2'><a href='#ngwmn_cache_specialty_apis'>NGWMN Cache Specialty APIs</a></p>
+                <p class='indent_3'><a href='ajax'>AJAX</a></p>
+                <p class='indent_3'><a href='prefetch'>Prefetch</a></p>
+                <p class='indent_2'><a href='#mediator_specialty_apis'>Mediator Specialty APIs</a></p>
+                <p class='indent_3'><a href='#source_view'>Source View</a></p>
+            </div>
+            
+            <p>
+            This is where the information about data and services for NGWMN - internal and external - is documented.
+            </p>
+            <p>
+            It is for <strong>all parts</strong> of the NGWMN.
+            </p>
+            <p>
+            There are two kinds of information here, broadly speaking:
+            </p>
+            <ol>
+                <li><strong>Semantics:</strong> generally NGWMN-wide definitions. Describes the meaning and intention.</li>
+                <li><strong>API:</strong> Specific service Request/Response interfaces. Usually specific to one 
+particular component of the NGWMN; but there is definitely some overlap.</li>
+            </ol>
+            
+            <a name='ngwmn_data_defs'></a>
+            <h1>NGWMN Data Definitions</h1>
+            <p>
+            <strong>Note: the "names" listed here were created for this internal documentation, and are not part of the NGWMN code or configuration.</strong>
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>name</th>
+                        <th>description</th>
+                        <th>aka</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a name='agency_alias'></a><span class='agency-alias'>agency_alias</span></td>
+                        <td>The <strong>NGWMN-wide</strong> short name for a partner agency that provides data to NGWMN.</td>
+                        <td>"agency_cd", "agencyID"</td>
+                    </tr>
+                    <tr>
+                        <td><a name='service_alias'></a><span class='service-alias'>service_alias</span></td>
+                        <td>The <strong>application-specific</strong> identifier for a service. Even though the services are broadly 
+semantically consistent, they have different names in different applications. (For example, the service called "WATERLEVEL" in NGWMN Cache is called "sos" in the Mediator.) See the "NGWMN Services" table below for details.</td>
+                        <td>"data type", "type"</td>
+                    </tr>
+                    <tr>
+                        <td><a name=site_id></a><span class='site-id'>site_id</span></td>
+                        <td>The <strong>agency-specific</strong> identifier of the well. From NGWMN's point of view, it's part of a 2-tuple (agency_alias, site_id) because the site_id's uniqueness is scoped to its owning agency. (Thankfully, this identifier is stable for all parts of NGWMN.)</td>
+                        <td>"featureId", "featureID", "siteid", "site_num", etc.</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            
+            <a name='general_service_semantics'></a>
+            <h1>NGWMN General Service Semantics</strong></h1>
+            <p>
+            NGWMN works with specific services to provide information about sites.
+            </p>
+            <p>
+            These services have the same <strong>semantics</strong> throughout NGWMN, but their specific APIs differ in different parts of the NGWMN.
+            </p>
+            <p>
+            The following table lists the general services, describes the semantics, and maps each semantic definition to its application-specific aliases.
+            </p>
+            
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>name</th>
+                        <th>description</th>
+                        <th>NGWMN Cache</th>
+                        <th>NGWMN Mediator</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a name='site_feature_service_semantics'></a><strong>site_feature_service</strong></td>
+                        <td>For the requested site, provides two kinds of data:
+                            <ul>
+                                <li><strong>construction log,</strong> an historical record of the site's construction.</li>
+                                <li><strong>lithology/screen data,</strong> describing significant aspects of the well's physical construction:
+                                    <ul>
+                                        <li><strong>lithology</strong> is for drilled wells, and consists of layers of earth and rock through which the well was sunk.</li>
+                                        <li><strong>screen data</strong> is for open wells.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>LOG</td>
+                        <td><strong>wfs</strong></td>
+                    </tr>
+                    <tr>
+                        <td><a name='water_quality_service_semantics'></a><strong>water_quality_service</strong></td>
+                        <td>For the requested site, provides historical time-series data about water quality measurements: typically chemical or biological contaminants.</td>
+                        <td>QUALITY</td>
+                        <td><strong>qw</strong></td>
+                    </tr>
+                    <tr>
+                        <td><a name='water_level_service_semantics'></a><strong>water_level_service</strong></td>
+                        <td>For the requested site, provides historical time-series data on water level measurements.</td>
+                        <td>WATERLEVEL</td>
+                        <td><strong>sos</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+
+
+            <a name='core_service_apis'></a>
+            <h1>Core Service APIs</strong></h1>
+            <p>
+            In the API summaries below, the following parametric notation is used:
+            </p>
+            <p>
+            <strong><span class='host'>&lt;host&gt;</span>:</strong> the full host URL, including port if necessary. Examples:
+            </p>
+            <ul>
+                <li><span class='redacted'>&nbsp;Hostname redacted&nbsp;</span></li>
+                <li><a href="http://cida.usgs.gov/">http://cida.usgs.gov</a></li>
+            </ul>
+            <p>
+            <span class='base-context'>&lt;*_base_context&gt;</span><strong>:</strong> the application context of the part of NGWMN identified by the <strong>*</strong>. Examples:
+            </p>
+            <ul>
+                <li><span class='base-context'>&lt;cache_base_context&gt;</span><strong>: /<span class='redacted'>&nbsp;Context redacted&nbsp;</span></strong></li>
+                <li><span class='base-context'>&lt;mediator_base_context&gt;</span><strong>: /<span class='redacted'>&nbsp;Context redacted&nbsp;</span></strong></li>
+            </ul>
+            <p>
+            As well as the NGWMN Data Definitions listed above:
+            </p>
+            <ul>
+                <li><span class='agency-alias'>&lt;agency_alias&gt;</span></li>
+                <li><span class='service-alias'>&lt;service_alias&gt;</span></li>
+                <li><span class='site-id'>&lt;site_id&gt;</span></li>
+            </ul>
+            <p>
+            <strong>These are the services that obtain content directly from the Cache and the Mediator respectively.</strong>
+            </p>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>semantic name</th>
+                        <th>NGWMN Cache</th>
+                        <th>description</th>
+                        <th>NGWMN Mediator</th>
+                        <th>description</th>
+                    </tr>
+                    <tr class='service-row'>
+                        <td><a name='site_feature_service_apis'></a><strong>site_feature_service</strong></td>
+                        <td>LOG</td>
+                        <td>Obtains the Cache's latest copy of the requested data. Does <strong>not</strong> trigger a refresh of the cache for that site.</td>
+                        <td><strong>wfs</strong></td>
+                        <td>Obtains the requested site's data from the primary source identified by <span class='agency-alias'>&lt;agency_alias&gt;</span>. Formats it according to the Mediator service specification.</td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>request</td>
+                        <td colspan='2'><strong><span class='host'>&lt;host&gt;</span><span class='base-context'>&lt;cache_base_context&gt;</span>/data/<span class='agency-alias'>&lt;agency_alias&gt;</span>/<span class='site-id'>&lt;site_id&gt;</span>/<span class='service-alias'>LOG</span></strong></td>
+                        <td colspan='2'><strong><span class='host'>&lt;host&gt;</span><span class='base-context'>&lt;mediator_base_context&gt;</span>/<span class='agency-alias'>&lt;agency_alias&gt;</span>/<span class='service-alias'>wfs</span>?featureId=<span class='site-id'>&lt;site_id&gt;</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>notes</td>
+                        <td colspan='2'>&nbsp;</td>
+                        <td colspan='2'>
+                            <ul>
+                                <li>do <strong>NOT</strong> put a trailing slash after <strong>/<span class='service-alias'>wfs</span>.</strong> Won't work.</li>
+                                <li>paramname "featureId" is case sensitive.</li>
+                                <li>wrong paramname gives empty result.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>example request</span></td>
+                        <td colspan='2'>http:<span class='redacted'>&nbsp;Hostname redacted&nbsp;</span>/<span class='redacted'>&nbsp;Context redacted&nbsp;</span>/data/USGS/390002074541002/LOG</td>
+                        <td colspan='2'>http:<span class='redacted'>&nbsp;Hostname redacted&nbsp;</span>/<span class='redacted'>&nbsp;Context redacted&nbsp;</span>/agency/USGS/wfs?featureId=390002074541002</td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>response</td>
+                        <td colspan='2'>An OpenGIS Web Feature Service response (or, at least, that is the enclosing envelope; the only schema reference is to the Observation and Management schema for the namespace <strong>http://www.opengis.net/om/1.0</strong>.) On quick examination, looks substantially the same as the content returned by the Mediator.</td>
+                        <td colspan='2'>An OpenGIS Web Feature Service response (or, at least, that is the enclosing envelope; there is no Schema reference.)</td>
+                    </tr>
+                    <tr class='service-row'>
+                        <td><a name='water_quality_service_apis'></a><strong>water_quality_service</strong></td>
+                        <td>QUALITY</td>
+                        <td>Obtains the Cache's latest copy of the requested data. Does <strong>not</strong> trigger a refresh of the cache for that site.</td>
+                        <td><strong>qw</strong></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>request</td>
+                        <td colspan='2'><strong><span class='host'>&lt;host&gt;</span><span class='base-context'>&lt;cache_base_context&gt;</span>/data/<span class='agency-alias'>&lt;agency_alias&gt;</span>/<span class='site-id'>&lt;site_id&gt;</span>/<span class='service-alias'>QUALITY</span></strong></td>
+                        <td colspan='2'><strong><span class='host'>&lt;host&gt;</span><span class='base-context'>&lt;mediator_base_context&gt;</span>/<span class='agency-alias>&lt;agency_alias&gt;</span>/<span class='service-alias'>qw</span>?siteid=<span class='site-id'>&lt;site_id&gt;</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>notes</td>
+                        <td colspan='2'>&nbsp;</td>
+                        <td colspan='2'>
+                            <ul>
+                                <li>do <strong>NOT</strong> put a trailing slash after <strong>/<span class='service-alias'>qw</span>.</strong> Won't work.</li>
+                                <li>paramname "siteid" is idiosyncratic.</li>
+                                <li>paramname "siteid" is case sensitive.</li>
+                                <li>wrong paramname gives empty result.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>example request</td>
+                        <td colspan='2'>http:<span class='redacted'>&nbsp;Hostname redacted&nbsp;</span>/<span class='redacted'>&nbsp;Context redacted&nbsp;</span>/data/USGS/390002074541002/QUALITY</td>
+                        <td colspan='2'>http:<span class='redacted'>&nbsp;Hostname redacted&nbsp;</span>/<span class='redacted'>&nbsp;Context redacted&nbsp;</span>/agency/USGS/qw?siteid=390002074541002</td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>response</td>
+                        <td colspan='2'>Appears to be a homebrew XML format without a declared schema. Mostly the WQX-Outbound content from the Mediator... except bundled inside a no-namespace wrapper? Somewhat out of order compared to the Mediator's 
+    content, it looks like.</td>
+                        <td colspan='2'>WQX-Outbound 2.0 (a CIDA-curated schema)</td>
+                    </tr>
+                    
+                    <tr class='service-row'>
+                        <td><a name='water_level_service_apis'></a><strong>water_level_service</strong></td>
+                        <td>WATERLEVEL</td>
+                        <td>Obtains the Cache's latest copy of the requested data. Does <strong>not</strong> trigger a refresh of the cache for that site.</td>
+                        <td><strong>sos</strong></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>request</td>
+                        <td colspan='2'><strong><span class='host'>&lt;host&gt;</span><span class='base-context'>&lt;cache_base_context&gt;</span>/data/<span class='agency-alias'>&lt;agency_alias&gt;</span>/<span class='site-id'>&lt;site_id&gt;</span>/<span class='service-alias'>WATERLEVEL</span></strong></td>
+                        <td colspan='2'><strong><span class='host'>&lt;host&gt;</span><span class='base-context'>&lt;mediator_base_context&gt;</span>/<span class='agency-alias'>&lt;agency_alias&gt;</span>/<span class='service-alias'>sos</span>?featureId=<span class='site-id'>&lt;site_id&gt;</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>notes</td>
+                        <td colspan='2'>&nbsp;</td>
+                        <td colspan='2'>
+                            <ul>
+                                <li>do <strong>NOT</strong> put a trailing slash after <strong>/<span class='service-alias'>sos</span>.</strong> Won't work.</li>
+                                <li>paramname "featureId" is case sensitive.</li>
+                                <li>wrong paramname gives impressive big error message.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>example request</td>
+                        <td colspan='2'>http:<span class='redacted'>&nbsp;Hostname redacted&nbsp;</span>/<span class='redacted'>&nbsp;Context redacted&nbsp;</span>/data/USGS/390002074541002/WATERLEVEL</td>
+                        <td colspan='2'>http:<span class='redacted'>&nbsp;Hostname redacted&nbsp;</span>/<span class='redacted'>&nbsp;Context redacted&nbsp;</span>/agency/USGS/sos?featureId=390002074541002</td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>response</td>
+                        <td colspan='2'>A slightly modified copy of the data supplied by the Mediator</td>
+                        <td colspan='2'>A Mediator-specific mashup without a declared schema: an Open Geospatial Observation and Measurement envelope with various content from various sources.</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <a name='specialty_service_apis'></a>
+            <h1>Specialty Service APIs</h1>
+            <p>
+            <strong>These are services that do specific jobs or offer particular capabilities.</strong>
+            </p>
+            <table>
+                <tbody>
+                    <tr class='context-row'>
+                        <th colspan='3'><a name='ngwmn_cache_specialty_apis'></a>NGWMN Cache</th>
+                    </tr>
+                    <tr class='service-row'>
+                        <th>name</th>
+                        <th colspan='2'>description</th>
+                    </tr>
+                    <tr class='service-row'>
+                        <td><a name='ajax'></a><strong>Direct AJAX support for UI</strong></td>
+                        <td>The UI makes AJAX calls directly to the Cache when <strong>populating the site information tabs in the popup windows.</strong></p><p>Naturally, the UI does not use the cached XML. &nbsp;It requests instead a simplified, flattened, no-namespace, no-schema version which is generated on demand by the cache. This service provides that.</td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>request</strong></td>
+                        <td colspan='2'><strong><span class='host'>&lt;host&gt;</span><span class='base-context'>&lt;cache_base_context&gt;</span>/direct/flatXML/<span class='service-alias'>&lt;service_alias&gt;</span>/<span class='agency-alias'>&lt;agency_alias&gt;</span>/<span sclass='site-id'>&lt;site_id&gt;</span>&nbsp;</strong></td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>notes</td>
+                        <td colspan='2'>Note that the Cache <span class='service-alias'>service_alias</span> is<strong> lower case.</strong> It might be case sensitive, might not.</td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>example request</td>
+                        <td colspan='2'>http:<span class='redacted'>&nbsp;Hostname redacted&nbsp;</span>/<span class='redacted'>&nbsp;Context redacted&nbsp;</span>/direct/flatXML/waterlevel/USGS/265138082002201</td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>response</td>
+                        <td colspan='2'>Simple XML. An understanding of the XML content is baked into the UI code.</td>
+                    </tr>
+                    <tr class='service-row'>
+                        <td><a name='prefetch'></a><strong>Prefetch: force refresh data item in Cache</strong></td>
+                        <td colspan='2'>Triggers a refresh of the Cache's data. Pulls new content from the Mediator. Scope is
+                            <ul>
+                                <li>a single type of service for:</li>
+                                <li>a single site, identified by <span class='agency-alias'>agency_alias</span> and <span class='site-id'>site_id</span></li>
+                            </ul>
+                            Note that this is the service call used by the NGWMN Cache dashboard at the home page context /<span class='redacted'>&nbsp;Context redacted&nbsp;</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>request</td>
+                        <td colspan='2'><strong><span class='host'>&lt;host&gt;</span><span class='base-context'>&lt;cache_base_context&gt;</span>/prefetch?agencyID=<span class='agency-alias'>&lt;agency_alias&gt;</span>&amp;featureID=<span class='site-id'>&lt;site_id&gt;</span>&amp;type=<span class='service-alias'>&lt;service_alias&gt;</span></strong></td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>notes</td>
+                        <td colspan='2'>
+                            <p>
+                            Don't know if the paramnames are case sensitive. Safe assumption is that they are.
+                            </p>
+                            <p>
+                            This is the Cache, so the normal Cache <span class='service-alias'>service_alias</span> is correct for "type".
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>example request</td>
+                        <td colspan='2'>http:<span class='redacted'>&nbsp;Hostname redacted&nbsp;</span>/<span class='redacted'>&nbsp;Context redacted&nbsp;</span>/prefetch?agencyID=USGS&amp;featureID=265138082002201&amp;type=WATERLEVEL</td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>response</td>
+                        <td colspan='2'>
+                            <p>Provides a short statement of the number of bytes obtained from the Mediator. Does NOT return the data itself. (Subsequent direct calls to the Cache will, of course, return that latest data.)</p><p>The response message body should look something like this:
+                            </p>
+                            <p>
+                            <strong>Pre-fetch result</strong>
+                            </p>
+                            <pre>got 104366 bytes</pre>
+                            <p>
+                            if the message body only reports a small number of bytes (e.g. "got 262 bytes"), that's an empty resultset.
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <table>
+                <tbody>
+                    <tr class='context-row'>
+                        <th colspan='3'><a name='mediator_specialty_apis'></a><strong>Mediator</strong></th>
+                    </tr>
+                    <tr>
+                        <th>name</th>
+                        <th colspan='2'>description</th>
+                    </tr>
+                    <tr class='service-row'>
+                        <td><a name='source_view'></a><strong>Source view</strong></td>
+                        <td colspan='2'>
+                            <p>
+                            The Mediator provides a troubleshooting/analysis capability: viewing the source data that the Mediator has obtained from the primary source.
+                            </p>
+                            <p>
+                            The Mediator has a very simple way of doing this: adding the reserved "cocoon-view" request parameter with a value of "source". This is configured in the Mediator's <strong>sitemap.xmap.</strong> (It's explained in greater detail in the <a href='cocoon_and_mediator.html'>Cocoon and Mediator Technical Overview</a> page.)
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>request</td>
+                        <td colspan='2'>
+                            <strong><span class='host'>&lt;host&gt;</span><span class='base-context'>&lt;mediator_base_context&gt;</span>/<span class='agency-alias'>&lt;agency_alias&gt;</span>/&lt;<span class='service-alias'>service_alias</span>&gt;?&lt;site_id name&gt;=<span class='site-id'>&lt;site_id&gt;</span></span>&amp;cocoon-view=source</strong></td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>notes</td>
+                        <td colspan='2'>Note that the&nbsp;<strong>&lt;site_id name&gt;</strong> is parameterized in the above expression because it is not the same for all Mediator service definitions.</td>
+                    </tr>
+                    <tr>
+                        <td class='service-subhead'>example request</td>
+                        <td colspan='2'>http:<span class='redacted'>&nbsp;Hostname redacted&nbsp;</span>/<span class='redacted'>&nbsp;Context redacted&nbsp;</span>/agency/USGS/sos?featureId=390002074541002&amp;cocoon-view=source</td>
+                    </tr>
+                        <td class='service-subhead'>response</td>
+                        <td colspan='2'>The XML content obtained by the generator at the head of the Cocoon pipeline. The generator's output is serialized and directly returned. <strong>None of the pipeline's further transformations are performed</strong> on the returned content.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            <br/>
+        </div>
+    </div>
+</body>
+</html>

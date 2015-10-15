@@ -1,0 +1,100 @@
+<html>
+<head>
+    <title>NGWMN Docs Project</title>
+    <link rel='stylesheet' type='text/css' href='css/documentation.css' />
+</head>
+<body>
+    <div id='navbar'>
+        <p>Technical Documentation Project: NGWMN at USGS/CIDA</p>
+        <hr/>
+        <p><a href='parts_of_ngwmn.html'>The Parts of the NGWMN</a></p>
+        <p><a href='cocoon_and_mediator.html'>Cocoon and Mediator Technical Overview</a></p>
+        <p><a href='data_and_service_definitions.html'>Data and Service Definitions</a></p>
+        <p><a href='exercising_and_testing.html'>Exercising and Testing the NGWMN</a></p>
+    </div>
+    
+    <div id='envelope'>
+        <div id='content'>
+        
+            <h1 class='pagetitle'>Technical Documentation Project: NGWMN at USGS/CIDA</h1>
+            <p>
+            Bill Blondeau
+            </p>
+            <p>
+            These are selected items of documentation I created for a specific project, the <a href='http://cida.usgs.gov/ngwmn/' target='_blank'>National Groundwater Monitoring Network</a>, when I was working at <a href='http://cida.usgs.gov/' target='_blank'>USGS CIDA</a>. CIDA is the technical implementor and maintainer of NGWMN.
+            </p>
+            
+            <h4>Context: CIDA and NGWMN</h4>
+            <p>
+            The NGWMN documentation subproject was an important cost-containment effort.
+            </p>
+            <p>
+            CIDA is a very successful organization. It has developed, deployed, and maintained a lot of applications in support of scientific data management and dissemination. However, this kind of success has its own set of costs. Institutional knowledge loss and insufficient documentation are ubiquitous in the industry; but they bit CIDA especially hard.
+            </p>
+            <p>
+            NGWMN, despite smart and diligent efforts by the Project Coordinator, was a particular poster child for this effect. It was a classic start-stop project, characterized by intense bursts of talented, insightful productivity. Unfortunately, between these bursts were long, minimally funded stretches of production maintenance responsibility&mdash;during which memories would grow dim and people would move on.
+            </p>
+            <p>
+            The situation was compounded by two emergent technical issues: a multi-component architecture with idiosyncratic interfaces; and some technology stacks that turned out not to be widely adopted or understood by CIDA's available people.
+            </p>
+            <p>
+            I think you've seen this movie before.
+            </p>
+            
+            <h4>My involvement</h4>
+            <p>
+            I was first assigned to the NGWMN project for a high-urgency completion of NGWMN's <a href='http://www.opengeospatial.org/standards/sos' target='_blank'>Sensor Observation Service</a> implementation&mdash;<em>and</em>, while doing it, a knowledge transer from the departing senior engineer. My usual response to this kind of whitewater rafting through unknown territory is to document things, and this job ran true to form: I emerged from the project with an early version of the NGWMN system diagram shown in <a href='parts_of_ngwmn.html'>The Parts of the NGWMN</a>.
+            </p>
+            <p>
+            This pattern continued through the time I spent at CIDA: I would try to document what I could as I was occasionally assigned to NGWMN. This culminated with my final project before departure.
+            </p>
+            <p>
+             In preparation for an anticipated upsurge in the number of groundwater data contributing agencies, I had refactored the organization of the Mediator's handling of multiple contributors, and provided a fairly heavyweight regression test protocol. These tasks had required significant research into the NGWMN. Some of it involved some pretty deep diving. CIDA management agreed that this knowledge should be preserved, rather than walk out the door with me when I departed. I got the nod to document what I had learned.
+            </p>
+            <p>
+            This is drawn from the product of that final effort.
+            </p>
+            
+            <h1>About this Portfolio Piece</h1>
+            <p>
+            It's intended to provide a demonstration of my ability to research&mdash;and effectively document&mdash;a large, complicated project. I'm not attempting to demonstrate comprehensive documentation of the NGWMN. Which is good, because it doesn't and couldn't.
+            </p>
+            <p>
+            I have documented a lot of projects, applications, and systems. The work I delivered for NGWMN is some of the better documentation work I ever did&mdash;cost-effective, a good fit for the situation, and a particularly effective paydown of accumulated technical debt. 
+            </p>
+            
+            
+            <h4>The documentation was never finished</h4>
+            <p>
+            The <em>entire</em> NGWMN was far too big for me to document in the few weeks I had to devote to the task. Not only are these portfolio items only a subset of the delivered docs in the first place, they are drawn from a job that was only partially completed. A snapshot in time, taken when I left.
+            </p>
+            <p>
+            When you read these, you will sometimes see obviously unfinished parts: for example, the empty headings in <a href='parts_of_ngwmn.html'>The Parts of the NGWMN</a>, looking like empty storefronts in a new shopping mall. I left those in place because their presence provides some insight into the structure I intended for the benefit of the reader. 
+            </p>
+            
+            <h4>Internal documents</h4>
+            <p>
+            The documentation from which this portfolio was drawn was for internal, rather than public, use.
+            </p>
+            <p>
+            My first concern has been to redact any confidential information. Specific instances of inline redaction occur in the texts as highly recognizable <span class='redacted'>&nbsp;Redacted&nbsp;</span> items. Block redactions, on the other hand, I haven't bothered to note.
+            </p>
+            <p>
+            Another effect of this being extracted from in-house documentation is that the original material contained live links to internal operational resources. Those have of course been removed.
+            </p>
+            <p>
+            A final divergence from the original state of the NGWMN documentation comes from the rushed nature of the work, and the awkward limitations of the wiki system in which it was composed. As I went along, converting the material to proper HTML/CSS, I was occasionally struck by the need to visually reformat the documentation. (Example: the iTerm console representations on <a href='exercising_and_testing.html#installing_regression_test_osx'>Exercising and Testing the NGWMN</a> would not have been feasible in the wiki.)
+            </p>
+            <p>
+            Inevitably, there were also a few random edits. I would spot minor mistakes. And then, there were occasional restatements of something&#x2026; You know how it is.
+            </p>
+            
+            
+            <h4>Acknowledgments</h4>
+            <p>
+            Putting this documentation together, under sometimes awkward circumstances, was a nontrivial effort. Special thanks to Jessica Lucido, Roger Hayes, Dave Usselman, and Eric Everman; and in general, to all of my erstwhile comrades in churn at CIDA.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

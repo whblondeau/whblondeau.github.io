@@ -1,0 +1,131 @@
+<html>
+<head>
+    <title>Parts of the NGWMN</title>
+    <link rel='stylesheet' type='text/css' href='css/documentation.css' />
+</head>
+<body>
+    <div id='navbar'>
+        <p><a href='index.html'>Technical Documentation Project: NGWMN at USGS/CIDA</a></p>
+        <hr/>
+        <p>The Parts of the NGWMN</p>
+        <p><a href='cocoon_and_mediator.html'>Cocoon and Mediator Technical Overview</a></p>
+        <p><a href='data_and_service_definitions.html'>Data and Service Definitions</a></p>
+        <p><a href='exercising_and_testing.html'>Exercising and Testing the NGWMN</a></p>
+    </div>
+    
+    <div id='envelope'>
+        <div id='content'>
+            <h1 class='pagetitle'>The Parts of the NGWMN.</h1>
+            <p>
+            This is a system diagram of the NGWMN. It looks fairly complicated, which is both correct and fair. NGWMN is built of multiple major components. Their interactions are extremely important.
+            </p>
+            <p>
+            The various parts, and their actions, are described below the diagram.
+            </p>
+            <p>
+            <img src='resources/ngwmn_diagram.png'>
+            </p>
+            
+            <br/>
+            <br/>
+            
+            <h1>The parts:</h1>
+            
+            <br/>
+            <h1><strong>Groundwater Data Sources</strong></h1>
+            <p>
+            These are agencies that contribute groundwater data to NGWMN. The list is intended to grow over time, but adoption of new contributors appears to be stalled right now.
+            </p>
+            
+            <br/>
+            <h1><strong>Observation Services</strong></h1>
+            <p>
+            These services are offered by the Groundwater Data Sources. The services are called <strong>by the Mediator</strong> when it is assembling groundwater data in response to a query.
+            </p>
+            <p>
+            Service endpoints are found by inspecting the Mediator's pipelines: all endpoints are referenced in <strong>generator</strong> components.
+            </p>
+            
+            <br/>
+            <h1><strong>NWIS Well Construction/Lithology</strong></h1>
+            <p>
+            NWIS is a partial exception to the model of the Mediator obtaining data directly from the Observation Services exposed by the Groundwater Data Sources. For reasons not directly known (I am guessing performance/convenience of doing it this way, since CIDA has a USGS-internal connection to NWIS), the Lithology (for drilled wells) and Screen (for open wells) data is obtained by a regular (currently 3AM each morning) ETL process and stashed in snapshot tables in the <span class='redacted'>&nbsp;DB Name redacted&nbsp;</span> database.
+            </p>
+            <p>
+            The most recent snapshot tables are in turn aliased as <span class='redacted'>&nbsp;DB Name redacted&nbsp;</span> (screen data) and <span class='redacted'>&nbsp;DB Name redacted&nbsp;</span> (lithology data). Note: the ETL MUST reestablish the proper permissions <span class='notable'>or lithology and screen data will vanish for NWIS wells</span> (e.g. New Jersey).
+            </p>
+            
+            <br/>
+            <h1><strong>OGC-IE</strong> (aka 'gwie')</h1>
+            <p>
+            <strong>default web context:<span class='notable'> /<span class='redacted'>&nbsp;Context redacted&nbsp;</span></span></strong></p><p>A set of OGC web service implementations intended mainly for internal use. External web service access is expected to be delegated via the 
+    NGWMN cache; this expectation has sometimes been relaxed for experimental tests of functionality with external
+            </p>
+            <p>
+            For NWIS sites, this module's ETL loads <em>only a subset</em> of that data into the dev tier (and maybe QA?). That results in some well sites not being available on the non-prod machines.
+            </p>
+            
+            <br/>
+            <h1><strong>Mediator</strong> (aka 'cocoon', 'gin', 'gwdp-hub' etc)</h1>
+            <p>
+            <strong>default web context:<span class='notable'> /<span class='redacted'>&nbsp;Context redacted&nbsp;</span></span></strong>
+            </p>
+            <p>
+            The Mediator is an Apache Cocoon application, which means that <strong>it's a set of processing <em>pipelines</em> that are mapped to characteristics of an HTTP Request.</strong> The output of the selected pipeline is used to generate the corresponding HTTP Response. See the <a href='cocoon_and_mediator.html'>Cocoon / Mediator Technical Overview</a> for more detailed information.
+            </p>
+            
+            <h3>What's "Mediation", eh Precious?</h3>
+            <p>
+            <strong><em>Mediation</em></strong> means to <strong>obtain data from a primary source,</strong> and to <strong>formulate that data according to the Mediator's service interface.</strong> Mediation means:
+            </p>
+            <ul>
+                <li>Translating the primary source's <strong>representation of the data</strong> into the one the Mediator provides to the requestor.</li>
+                <li><strong>Reconciliation of semantics</strong> across differing interfaces, especially lists, categories, and other keyword-level definitions.</li>
+                <li><strong>Guaranteeing the appropriateness</strong> of the request-response mapping (in other words, promising that the question and answer embodied in the Mediator's interface is actually fulfilled by the call to the primary source's service.)</li>
+            </ul>
+            <p>
+            Mediation acts to <strong>hide the details of the back-end service interface definitions.</strong> You can ask the Mediator a question, and receive the answer, according to the Mediator's service interface, <strong>without needing to know about the details of corresponding service interfaces offered by the primary sources.</strong>
+            </p>
+            
+            <br/>
+            <h1><strong>NGWMN Cache</strong></h1>
+            <p>
+            <strong>default web context:<span class='notable'> /<span class='redacted'>&nbsp;Context redacted&nbsp;</span></span></strong>
+            </p>
+            <p>The Cache was a later construction than the rest. It was built when it became painfully apparent that the Mediator's real-time latency was far too long. The Cache addresses the problem successfully, being much quicker to return data.
+            </p>
+            
+            <h3>Prefetch</h3>
+            <p>
+            The intent of the Cache is to store the output of the Mediator in advance of any specific query for any particular well's information. This is done by automating the <a href='data_and_service_definitions.html#prefetch'>prefetch</a> Web Service calls in a systematic fashion. Prefetching for a given site can also be manually performed via the <a href='exercising_and_testing.html#dashboard'>NGWMN Data Cache Dashboard</a>, a link page that resides at the root of the NGWMN Cache.
+            </p>
+            
+            <h3>Additional Cache Functionality</h3>
+            <p>
+            The Cache also performs some actions that exceed the primary task of caching Mediator output:
+            </p>
+            <ul>
+                <li>The Cache exposes an AJAX endpoint from which web apps can pull service-specific content in a simplified, lightweight XML format.</li>
+                <li>The Cache performs some modifications (mostly flattening) on data retrieved by the normal <a href='data_and_service_definitions.html#core_service_apis'>Core Service API</a>: in other words, the results of a Core API call to the Cache will, at least in some cases, differ from the results of a Core API call to the Mediator for the same service data from the same well. This is probably an implementation flaw.</li>
+                <li>The Cache creates bundled zip files for multiple sites and types of data so that users can select and download multiple sites and data types as a single file.</li>
+            </ul>
+            
+            
+            <h1><strong>NGWMN Web App</strong></h1>
+            <p>
+            <strong>default web context:<span class='notable'> /<span class='redacted'>&nbsp;Context redacted&nbsp;</span></span></strong>
+            </p>
+            
+            <br/>
+            <h1><strong>NGWMN Geoserver</strong></h1>
+            <p>&nbsp;</p>
+            
+            <br/>
+            <h1><strong>Well Registry Management Application</strong></h1>
+            <p>&nbsp;</p>
+        
+        </div>
+    
+    </div>
+</body>
+</html>

@@ -1,0 +1,347 @@
+
+    body
+    {
+        margin: 0px;
+        color: #202020;
+    }
+    
+    div#navbar
+    {
+        padding: 2em;
+        font-family: "Trebuchet MS", Helvetica, monospace;
+        font-size: medium;
+        
+        background-color: #f8e8d4;
+        
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
+        width: 10%;
+    }
+    
+    div#envelope
+    {
+        position: absolute;
+        left: 14%;
+        width: 85%;
+        
+        padding-bottom: 1200px;  /* to permit scrolling to anchors down near the bottom of the page */
+    }
+    
+    div#content
+    {
+        width: 85%;
+        margin-right: auto;
+        margin-left: auto;
+        
+        /*border: thin solid black;*/
+        
+        font-family: Helvetica, Arial, sans-serif;
+    }
+    
+    li
+    {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
+    
+    div#content p, div#content li
+    {
+        font-size: 20px;
+    }
+    
+    a:link, a:visited
+    {
+        color: #3300FF;
+        text-decoration: none;
+    }
+    
+    a:hover
+    {
+        text-decoration: underline;
+    }
+    
+    div#content div#toc
+    {
+        
+    }
+    
+    div#content div#toc p
+    {
+        font-size: 15px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    
+    div#content div#toc p.indent_1
+    {
+        margin-left: 0;
+    }
+
+    div#content div#toc p.indent_2
+    {
+        margin-left: 2em;
+    }
+
+    div#content div#toc p.indent_3
+    {
+        margin-left: 4em;
+    }
+
+    div#content div#toc p.indent_4
+    {
+        margin-left: 6em;
+    }
+
+
+   
+    div#content h1,
+    div#content h2,
+    div#content h3,
+    div#content h4,
+    div#content h5
+    {
+        border-style: groove;
+        border-width: 2px 0 0 0;
+        border-color: #808080;
+        
+        padding-top: 0.7em;
+        margin-top: 2.5em;
+    }
+
+    div#content h1.pagetitle
+    {
+        border-style: none;
+        color: #308030;
+    }
+    
+    div#content h1
+    {
+        font-size: 26px;
+        margin-top: 2em;
+    }
+    
+    div#content h2
+    {
+        font-size: 24px;
+    }
+    
+    div#content h3
+    {
+        font-size: 22px;
+    }
+    
+    div#content h4
+    {
+        font-size: 20px;
+    }
+    
+    div#content h5
+    {
+        font-size: 18px;
+    }
+    
+    div#content table
+    {
+        border-collapse: collapse;
+        border-style: solid;
+        border-width: 1px;
+        border-color: #d0d0d0;
+        
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+    
+    div#content table th, div#content table td
+    {
+        border-style: solid;
+        border-width: 1px;
+        border-color: #d0d0d0;
+        
+        padding: 0.5em 1em;
+        font-size: 17px; /* slightly smaller than p and li */
+    }
+    
+    div#content table td li
+    {
+        font-size: 17px; /* slightly smaller than p and li */
+        margin-top: 0.4em;
+        margin-bottom: 0.4em;
+    }
+    
+    div#content table th
+    {
+        background-color: #f0f0f0;
+    }
+    
+    div#content table td
+    {
+        vertical-align: top;;
+    }
+    
+    
+    /* hard colors */
+    
+    .grn
+    {
+        color: #00ff00;
+    }
+    
+    .red
+    {
+        color: #ff0000;
+    }
+    
+    .onblack
+    {
+        background-color: #303030;   /* Not really "black" but it's what we're using here... */
+    }
+    
+    
+    /* semantic css */
+    
+    .code
+    {
+        font-family: monospace;
+    }
+    
+    .warning
+    {
+        color: #c00020;  /* blood red, hopefully */
+    }
+    
+    .textpage, .console
+    {
+        border-style: solid;
+        border-width: 1px;
+        border-color: #a0a0a0;
+
+        white-space: pre;
+        font-size: 15px;
+        width: 70%;
+        margin-top: 2em;
+        margin-bottom: 2em;
+    }
+    
+    .codepage
+    {
+        line-height: 1.5;
+        font-family: monospace;
+        white-space: pre;
+        font-size: 17px;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        
+        color: #202070;
+    }
+    
+    .textpage
+    {
+        padding: 3em;
+    }
+    
+    .textpage .rem
+    {
+        color: #a0a0a0;
+    }
+
+    .console
+    {
+        padding: 1em;
+        line-height: 1.2;
+        
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #303030;
+    }
+    
+    .console .rem
+    {
+        color: #d0d0e0;
+    }
+    
+    .notable
+    {
+        font-weight: bold;
+        color: rgb(153,51,0);
+    }
+    
+    .redacted
+    {
+        border-style: solid;
+        border-width: 1px 2px;
+        background-color: #d0f0e8;
+        color: #000;
+        border-color: #309070;
+        font-weight: bold;
+        font-variant: small-caps;
+        font-size: smaller;
+    }
+    
+    .digression
+    {
+        color: rgb(0,128,128);
+    }
+    
+    .agency-alias
+    {
+        color: rgb(153,51,0);
+        font-weight: bold;
+    }
+    
+    .service-alias
+    {
+        color: #6000e0;
+        font-weight: bold;
+    }
+    
+    .site-id
+    {
+        color: #209030;
+        font-weight: bold;
+    }
+    
+    .host
+    {
+        color: rgb(128,0,128);
+        font-weight: bold;
+    }
+    
+    .base-context
+    {
+        color: #308070;
+        font-weight: bold;
+    }
+    
+    tr.service-row td
+    {
+        background-color: #ddfade;
+    }
+    
+    td.service-subhead
+    {
+        text-align: right;
+        color: rgb(153,153,153);
+        font-weight: bold;
+    }
+    
+    div#content table tr.context-row th
+    {
+        background-color: #e0f0ff;
+    }
+    
+    .fakelink
+    {
+        text-decoration: underline;
+        color: #3300FF;
+    }
+    
+    .fakelink-off
+    {
+        text-decoration: none;
+        color: #303030;  /* if body color changes, change this to match */
+    }
+    
+    
+    

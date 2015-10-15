@@ -1,0 +1,306 @@
+<html>
+<head>
+    <title>Cocoon and the Mediator</title>
+    <link rel='stylesheet' type='text/css' href='css/documentation.css' />
+</head>
+<body>
+    <div id='navbar'>
+        <p><a href='index.html'>Technical Documentation Project: NGWMN at USGS/CIDA</a></p>
+        <hr/>
+        <p><a href='parts_of_ngwmn.html'>The Parts of the NGWMN</a></p>
+        <p>Cocoon and Mediator Technical Overview</p>
+        <p><a href='data_and_service_definitions.html'>Data and Service Definitions</a></p>
+        <p><a href='exercising_and_testing.html'>Exercising and Testing the NGWMN</a></p>
+    </div>
+    
+    <div id='envelope'>
+        <div id='content'>
+            
+            <a name='HOOHOO'></a>
+            <h1 class='pagetitle'>Cocoon and the Mediator</h1>
+            
+            <div id='toc'>
+                <p class='indent_1'><a href='#apache_cocoon'>Apache Cocoon</a></p>
+                <p class='indent_2'><a href='#cocoon_tldr'><span class="notable"><strong>Cocoon TL;DR</strong></span></a></p>
+                <p class='indent_2'><a href='#cocoon_application_structure'>The Cocoon Application structure</a></p>
+                <p class='indent_2'><a href='#cocoon_request_response_operations'>Cocoon Request/Response Operation</a></p>
+                <p class='indent_2'><a href='#cocoon_request_response_diagram'>Cocoon Request/Response Diagram</a></p>
+                <p class='indent_2'><a href='#sitemap.xmap'><span class="notable">sitemap.xmap</span>: the XML files that define the behavior of your Cocoon application</a></p>
+                <p class='indent_2'><a href='#cocoon_pipelines'>Cocoon Pipelines</a></p>
+                <p class='indent_3'><a href='#pipeline_generator'>Pipeline beginning: the Generator</a></p>
+                <p class='indent_3'><a href='#pipeline_transformers'>Pipeline middle: Transformers</a></p>
+                <p class='indent_3'><a href='#pipeline_serializer'>Pipeline end: the Serializer</a></p>
+                <p class='indent_3'><a href='#pipeline_views'>Pipeline inspection hatches: Views</a></p>
+                <p class='indent_1'><a href='#mediator'>The Mediator</a></p>
+                <p class='indent_2'><a href='#particulars_of_mediator'>Particulars of the Mediator/Hub Cocoon Application</a></p>
+                <p class='indent_3'><a href='#mediator_data_access_diagram'>NGWMN Mediator: data access diagram</a></p>
+            </div>
+            
+            <p>
+            The NGWMN Mediator is an <a href='https://cocoon.apache.org/2.1/' target='_blank'>Apache Cocoon 2.1</a> application.
+            </p>
+            <p>
+            Cocoon is not well understood in general at CIDA, and the specifics of how the Mediator uses Cocoon also need to be explicitly described.
+            </p>
+            <p>
+            Documentation is necessary, or else the Mediator is going to impose a high recurring cost on CIDA: historically, every time a developer has been assigned to this project, just getting up to speed has been a research project in 
+its own right.
+            </p>
+            <p>
+            Hence this page. <strong>Please update it as appropriate.</strong>
+            </p>
+            <p>
+            Cocoon in general is described first. Then, the Mediator is described in terms of the general Cocoon description.
+            </p>
+            
+            <a name='apache_cocoon'></a>
+            <h2>Apache Cocoon</h2>
+            
+            <a name='cocoon_tldr'></a>
+            <h3><span class='notable'><strong>Cocoon TL;DR</strong></span></h3>
+            <p>
+            Cocoon is a simple idea: a <strong>declarative mapping</strong> between
+            </p>
+            <ul>
+                <li><strong>HTTP Request characteristics,</strong> and</li>
+                <li>the <strong>actions taken</strong> to generate the corresponding HTTP Response.</li>
+            </ul>
+            <p>
+            The actions taken are, in Cocoon, implemented as processing <strong>pipelines.</strong> These pipelines are ordered sequences of
+            </p>
+            <ul>
+                <li>data acquisition,</li>
+                <li>processing, and</li>
+                <li>serialization</li>
+            </ul>
+            <p>actions that construct the HTTP Response to be returned. <strong>A pipeline may contain internal decision logic,</strong> which means that, although it's a sequence of steps at execution time, it's a tree structure in its definition.
+            </p>
+            <p>
+            Cocoon pipelines use <a href='http://en.wikipedia.org/wiki/Simple_API_for_XML' target='_blank'>SAX events</a>,
+ a design decision that favors run time efficiency and reduced memory footprint. Cocoon is intended primarily as a high-volume, high-speed request/response processing framework.
+            </p>
+            
+            
+            <a name='cocoon_application_structure'></a>
+            <h3>The Cocoon Application structure</h3>
+            <p>
+            Cocoon applications can be confusing to understand, because <strong>configuration, behavior, resources,</strong> and <strong>source code</strong> are<strong> all placed in a recursive folder structure.</strong>
+            </p>
+            <ul>
+                <li>Folder scope is generally very strictly observed.</li>
+                <li>General kinds of resources can be placed in various locations in the folder structure, which <strong>modifies their scope</strong> but <strong>does not modify their behavior.</strong></li>
+                <li>Some specific kinds of resources (particularly the ones that govern configuration &amp; deployment) <strong>do</strong> have specific homes in the folder structure - normally the application root directory, or dedicated subdirectories such as WEB-INF.</li>
+                <li>However, <strong>it's typical that a Cocoon application's behavior is recursively defined by elaborating the folder structure.</strong> This can get complicated rather quickly, especially if the application's designers chose a highly distributed strategy.&nbsp;</li>
+                <li>Therefore, the very first step in learning a Cocoon application is to understand the folder structure.</li>
+                <li>And, if it's not clearly documented, you have a research project on your hands. <img src='resources/smile.png' alt='(smile)'></li>
+            </ul>
+            
+            
+            <a name='cocoon_request_response_operations'></a>
+            <h3>Cocoon Request/Response Operation</h3>
+            <p>
+            <strong>A Cocoon application unit of work is a single HTTP Request.</strong>
+            </p>
+            <p>
+            (Well, yes. It's a... <em>web app.</em>)
+            </p>
+            <p>
+            Depending on the match characteristics of the Request, work is assigned to a single pipeline. (Note: pipeline definitions, including matchers, are found in the <span class='notable'>sitemap.xmap</span> file (described below). For a given Request 
+URL, the matchers in the most local sitemap are evaluated&nbsp;<em>in document order</em>.
+            </p>
+            
+            
+            
+            <a name='cocoon_request_response_diagram'></a>
+            <h3>Cocoon Request/Response Diagram</h3>
+            <p>
+            This is an <strong>extremely simplified, but still conceptually correct,</strong> diagram of how Cocoon handles an HTTP Request.
+            </p>
+            <p>
+            Review it. Seriously, it will make everything else easier to follow.
+            </p>
+            <p>
+            <img src='resources/cocoon_diagram.png'/>
+            </p>
+            <p>
+            There is <strong>one kind of file</strong> that governs the behavior shown in the preceding diagram: <span class='notable'>sitemap.xmap</span>.
+            </p>
+            
+            
+            <a name='sitemap.xmap'></a>
+            <h3><span class='notable'>sitemap.xmap</span>: the XML files that define the behavior of your Cocoon application</h3>
+            <p>
+            A <span class='notable'>sitemap.xmap</span> file defines
+            </p>
+            <ul>
+                <li><strong>Views</strong></li>
+                <li><strong>Matchers,</strong> and,<em> on a per-matcher basis:</em>
+                    <br/>
+                    <ul>
+                        <li><strong>Variable declaration/assignment</strong> (note that, as is the case in XSLT, "variables" ain't actually variable. They are assigned at run time, but <strong>immutable.</strong>)</li>
+                        <li>A complete set of <strong>pipeline decision/definition logic statements.</strong> Decisions can depend on:
+                            <ul>
+                                <li>Matcher captured data (mainly, segments of Request URLs); matchers capture just like regexs do.</li>
+                                <li>Variable values.</li>
+                                <li>Named Request parameters</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <p>
+            All of the conditional logic structures will resolve to:
+            </p>
+            <ul>
+                <li>A child conditional logic structure, or</li>
+                <li>A Pipeline operational component.</li>
+            </ul>
+            <ul>
+                <li><strong>Various other code</strong>&nbsp;you probably won't care about, and won't have difficulty figuring out if you need to.</li>
+            </ul>
+            <p>
+            All in all, remember this:
+            </p>
+            <p>
+            <span class='notable'><strong>All of your sitemap.xmap files, taken together, define the application logic.</strong></span>
+            </p>
+            <p>
+            <span class='notable'>sitemap.xmap</span> does some other things (like setting up debugging and testing logic, because it's too sane and handy to do it there), but <strong>if you want to know about application behavior,</strong> your mantra in Cocoon should always be <em>"It's all about the <span class='notable'>sitemap.xmap</span> files."</em>
+            </p>
+            <p>
+            <span class='notable'>sitemap.xmap</span> syntax consists of <strong>three kinds of logical component:</strong>
+            </p>
+            <ul>
+                <li><strong>Request matchers,</strong> which are tested against the incoming HTTP Request. Mostly they are <strong>URL pattern matchers;</strong> but they can also match on the presence or value of request parameters.</li>
+                <li><strong>Conditional logic flow control,</strong> which evaluates various observable properties at run time.</li>
+                <li><strong>Pipelines</strong> (and <strong>Views</strong>), which are the sequences of operations that result in a serialized output to be returned in the message body of an HTTP Response.</li>
+            </ul>
+            
+            
+            <a name='cocoon_pipelines'></a>
+            <h3>Cocoon Pipelines</h3>
+            <p>
+            A "pipeline" is an ordered sequence of discrete steps:</p>
+            <ul>
+                <li>exactly one <strong>generator,</strong> which initializes the data process by emitting source data as SAX events.</li>
+                <li>0-<em>n</em> <strong>transformers,</strong> which consume SAX events and emit other SAX events.</li>
+                <li>xactly one <strong>serializer,</strong> which creates content suitable for the outgoing HTTP Response message body.</li>
+            </ul>
+            <p>
+            A pipeline may also contain
+            </p>
+            <ul>
+                <li><p>instructions for activating <strong>views,</strong>
+     which permit alternate representations of the pipeline's content 
+    somewhere along the line, usually for troubleshooting purposes.</p></li>
+            </ul>
+            <p>
+            Note that <span class='notable'><strong>although a Pipeline is an ordered sequence of action, its definition is, generally speaking, a reentrant tree,</strong></span> because of the conditional logic.
+            </p>
+            <p>
+            Note also that <span class='notable'><strong>it is completely OK to define a pipeline with <u>nested</u> matchers.</strong></span> You can read the Cocoon documentation until the cows come home and you won't actually find that mentioned. <span class='digression'>(True story: I was refactoring the Mediator's <span class='notable'>sitemap.xmap</span>, and feeling frustrated because the refactoring was topologically inconsistent with the application URL structure. "This might not work. Why couldn't I just nest matchers??" I snarled. Then I thought, "Wait. What if I <strong>can</strong> nest matchers?" I could, and I did, and it worked great. So, now you don't need to endure that. Moral of the story: the Cocoon documentation, while admirably clear in many respects, omits some very helpful, and in retrospect completely obvious, clarifications. Don't hesitate to try something just because it's not described or shown.)</span>
+            </p>
+            
+            <a name='pipeline_generator'></a>
+            <h4>Pipeline beginning: the Generator</h4>
+            <p>
+            A generator has one specific responsibility:<strong> to emit data as SAX events.</strong>
+            </p>
+            <p>
+            The presumption is that a generator is obtaining XML data from an external source - e.g., a web service - and then parsing it; but a custom-built generator can also be receiving prebuilt SAX events from some upstream source, or providing static data for test purposes. The point is, <strong>the generator will always emit SAX events and nothing else.</strong>
+            </p>
+            <p>
+            Out of the box, generators come in two basic flavors:
+            </p>
+            <ul>
+                <li><strong>map:generator</strong> is as vanilla as it gets. This is typically a call to a single data 
+    source, in which the returned content is XML structured by the source. The map:generator turns the XML into SAX events.</li>
+                <li><strong>map:aggregator</strong> is a little more complicated, but not much. The map:aggregator obtains content from multiple sources, and wraps the multiple content nodes in a single enclosing element. <em>This element's tagname is specified in the pipeline definition.</em> This can cause some unexpected behaviors in downstream XSLT or XQuery or whatever. You have been warned.</li>
+            </ul>
+            
+            <a name='pipeline_transformers'></a>
+            <h4>Pipeline middle: Transformers</h4>
+            <p>
+            The transformers are an ordered sequence of data transformations (including computations, calculations, inclusion of contingent content, sorting, filtering, etc). These are commonly written as <strong>XSLT transformations</strong>. Cocoon is also capable of invoking an <strong>XQuery</strong> application for executing really complex logic, but that's pretty rare (and doesn't occur in the NGWMN Mediator AFAIK.)
+            </p>
+            <p>
+            It is common for the XSLT files to be stored in the Cocoon application folder structure at an appropriate scope. Some XSLTs are very specific to a particular logical case; others are shared resources used in multiple cases.
+            </p>
+            
+            <a name='pipeline_serializer'></a>
+            <h4>Pipeline end: the Serializer</h4>
+            <p>
+            The final step is an output step, normally a <strong>serialization</strong> to a wire format suitable for an HTTP message body. The serializer is ordinarily (and in the case of the NGWMN Mediator, always) an XML writer. It can, however, be a custom-built output formatter that creates such outputs as tabular CSV/TSV, JSON, etc.
+            </p>
+            
+            <a name='pipeline_views'></a>
+            <h4>Pipeline inspection hatches: Views</h4>
+            <p>
+            A <strong>view</strong> is primarily a way of inspecting the content of the pipeline at some intermediate point. The usefulness of this is pretty obvious: it's very handy to be able to inspect various inputs and outputs if you're trying 
+    to diagnose a bug, or inspect the anticipated input to an XSLT, or something like that.
+            </p>
+            <p>
+            A view is simply a short-cut to a serializer that is invoked at a specific place in the pipeline. <strong>Views are invoked by adding a reserved "cocoon-view" request parameter to the Request URL.</strong> The value of the cocoon-view request parameter is the name of the view, as defined in <span class='notable'>sitemap.xmap</span>.
+            </p>
+            
+            
+            
+            
+            
+            <br/>
+            <a name='mediator'></a>
+            <h2>The Mediator</h2>
+            
+            <a name='particulars_of_mediator'></a>
+            <h3>Particulars of the Mediator/Hub Cocoon Application</h3>
+            <p>
+            Fortunately,<span class='notable'><strong> the Mediator's behavior is not defined in multiple places. <u>There is one specific <span class='notable'>sitemap.xmap</span> that governs the Mediator Hub</u>. All of the application logic is there.</strong></span>
+            </p>
+            <p>
+            This application definition <span class='notable'>sitemap.xmap</span> is<strong> <span class='redacted'>&nbsp;Path redacted&nbsp;</span></strong> (You may now perform your Happy Dance for up to two minutes, because I just saved you a great deal of research.) As a general rule, <span class='notable'>all Mediator control logic can be found in that single sitemap.xmap.</span> You will not need to look elsewhere unless your task involves more unusual configuration or definition work.
+            </p>
+            <p>
+            The GWDP Mediator pipelines are pretty straightforward. They, and their data, are accessible via three URLs with different jobs.
+            </p>
+            
+            <a name='mediator_data_access_diagram'></a>
+            <h3>NGWMN Mediator: data access diagram</h3>
+            
+            <p>
+            <img src='resources/cocoon_pipeline_data_urls.png'>
+            </p>
+            <ul>
+                <li>The <strong>Cocoon URL</strong> requests the actual work result.
+                    <ul>
+                        <li><em>How do I know what the URL is?</em>
+                            <ul>
+                                <li>See <a href='data_and_service_definitions.html'>the API documentation for the Mediator</a>.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>The <strong>Source View URL</strong> requests the output of the generator.
+                    <ul>
+                        <li><em>How do I know what the URL is?</em>
+                            <ul>
+                                <li>Exactly the same as the Cocoon URL for the given agency, service, and feature; <strong>except</strong> that you add the magical URL parameter <strong>cocoon-view=source.</strong> That dumps the Generator's output out directly to a serializer.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>The <strong>Bypass URL</strong> is the actual source of the data from the cooperating agency.
+                    <ul>
+                        <li><em>How do I know what the URL is?</em>
+                            <ul>
+                                <li>You have to look it up in <strong><span class='notable'>sitemap.xmap</span>, and work out how to create the URL for the given agency, service, feature_id.</strong> Sorry there's not a more general answer; but each agency/service combination is, in principle, idiosyncratic in its service definition. It's not too hard to do, though, except for the GeoServer-hosted remote 
+    stuff, which is confusing and fragile due to nested URL parameters.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+                
+        </div>
+    </div>
+</body>
+</html>
