@@ -43,12 +43,23 @@
         width: 760px;
         margin-left: auto;
         margin-right: auto;
+        font-size: 17px;
     }
 
     .article p, .article li
     {
         font-family: Helvetica, Arial, sans-serif;
+        font-size: 22px;
         /*font-family: "Times New Roman", Georgia, Serif;*/
+    }
+    
+    div.article h1,
+    div.article h2,
+    div.article h3,
+    div.article h4,
+    div.article h5
+    {
+        color: #006030;;
     }
 
     .contact-info p
@@ -93,6 +104,17 @@
     ul.inner-list li
     {
         list-style-type: none;
+    }
+    
+    p.provenance
+    {
+        font-style: italic;
+    }
+    
+    .pub-ref
+    {
+        font-weight: bold;
+        color: #207050;
     }
     
     
