@@ -43,7 +43,7 @@
         width: 760px;
         margin-left: auto;
         margin-right: auto;
-        font-size: 17px;
+        font-size: 17px;  /* for resumes etc */
     }
 
     .article p, .article li
