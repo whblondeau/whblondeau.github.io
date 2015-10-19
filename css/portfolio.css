@@ -16,3 +16,16 @@
         font-weight: bold;
         font-size: larger;
     }
+    
+    div.article > div.provenance
+    {
+        margin: 1em 2em 3em 2em;
+
+    }
+    
+    div.article > div.provenance p
+    {
+        font-size: 18px;
+        font-style: italic;    
+    }
+
