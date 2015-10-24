@@ -21,39 +21,69 @@
             <p>References upon request.</p>
         </div>
 
-        <p class='notice'>
-        <br/>
-        (Most recent projects still being compiled.)
-        <br/>
-        </p>
+
         
-<!--
+        <h3>Independent project <code>rocket-appliances</code> (ongoing)</h3>
+        <p class='role'>Researcher, Developer</p>
+        <p>
+        I was introduced to geospatial coding during some minor work at USGS/CIDA. I was interested enough to dig into the underlying mathematical and geographic concepts. (Face it: generating a map view with multiple superimposed data layers is simply cool.) I responded by developing a conceptual model that represents the key abstractions of geopatial work; this will ultimately be extended into a high-level language specification.
+        </p>
+        <p>
+        This project is at <a href='https://github.com/whblondeau/rocket-appliances' target='_blank'>https://github.com/whblondeau/rocket-appliances</a>.
+        </p>
+        <p class='tools'>Python, git</p>
+
+
         
-        <h3></h3>
-        <p class='role'></p>
+        <h3>USGS/CIDA: Documentation of NGWMN &mdash; March and April 2015</h3>
+        <p class='role'>Technical Analyst and Writer</p>
         <p>
-         
+        The <a href='http://cida.usgs.gov/ngwmn/' target='_blank'>National Groundwater Monitoring Network</a> (NGWMN)&mdash;built, maintained, and operated by CIDA&mdash;had imposed high ongoing costs due to a lack of documentation and an idiosyncratic technology stack. I documented a great deal of it while it was still fresh in mind after the refactoring project listed below.
         </p>
-        <p class='tools'></p>
-
-
-        <h3></h3>
-        <p class='role'></p>
         <p>
-         
+        More information, with a link to some samples of delivered content, in <a href='../techwriter/writing_portfolio.htm#ngwmn_documentation_excerpts' target='_blank'>my Technical Writing portfolio</a>.
         </p>
-        <p class='tools'></p>
+        <p class='tools'>Confluence Wiki, Google Docs</p>
+
+
+        
+        <h3>USGS/CIDA: Refactor of NGWMN Mediation &mdash; January to March 2015</h3>
+        <p class='role'>Researcher, Developer</p>
+        <p>
+        The <a href='http://cida.usgs.gov/ngwmn/' target='_blank'>National Groundwater Monitoring Network</a> (NGWMN), a portal for shared groundwater quality data from disparate sources, had been running in limited prototype mode for several years. In anticipation of a major increase in the number of participating agencies, I refactored NGWMN's information topology for <em>Mediation</em>, the term of art for accepting information from multiple contributors in arbitrary formats, and converting it to the NGWMN's standard internal data representation.
+        </p>
+        <p>
+        As a necessary part of that, I developed a heavyweight regression test, exercised it, and delivered it with thorough documentation. (You can see a summary documentation excerpt <a href='../portfolio/ngwmn/exercising_and_testing.html#howto_do_regression_test' target='_blank'>here</a>.)
+        </p>
+        <p class='tools'>Apache Cocoon, Python, XML/XSLT, Oxygen XML Editor</p>
+
+
+        
+        <h3>USGS/CIDA: Internal monitoring using NAGIOS &mdash; November 2014 to January 2015</h3>
+        <p class='role'>Researcher, Developer</p>
+        <p>
+        CIDA was evaluating NAGIOS, an open source framework for monitoring server, network, and application assets. I wrote a <a href='https://github.com/wblondeau-usgs/tomcat-monitor' target='_blank'>prototype client in Python</a> that would invoke the built-in self-reporting capabilities of <a href='http://tomcat.apache.org/tomcat-7.0-doc/manager-howto.html' target='_blank'>Tomcat Manager</a> included by default in each installation of the Apache Tomcat HTTP Server.
+        </p>
+        <p class='tools'>NAGIOS, Python, Python Requests, Python Beautiful Soup, Tomcat HTTP Server, Tomcat Manager, REST, bash scripting</p>
 
 
 
----->
+        <h3>USGS/CIDA: USGS Pubs Warehouse behavioral testing &mdash; October &amp; November 2014</h3>
+        <p class='role'>Developer</p>
+        <p>
+        The <a href='http://pubs.er.usgs.gov/' target='_blank'>USGS Publications Warehouse</a> provides online access to the very large, and continually increasing, store of official USGS publications. Internal document management was being implemented using JSON notation for semantics. I was tasked with writing Behavioral Tests in Gherkin to ensure that the mechanism for documents to supersede previous versions was correct.
+        </p>
+        <p class='tools'>Python, JSON, Lettuce BDD framework, Gherkin</p>
+
+
 
         <h3>USGS/CIDA: pywqp Water Quality Dataset Client &mdash; June to September 2014</h3>
         <p class='role'>Developer</p>
         <p>
         The <a href='http://waterqualitydata.us' target='_blank'>Water Quality Data Portal</a>, built and operated by CIDA, offers a web client for download of large datasets. This project created a complementary scriptable Python client to accomplish the same task. See <a href='https://github.com/wblondeau-usgs/pywqp' target='_blank'>the pywqp GitHub repository</a> for code, documentation, and details.
         </p>
-        <p class='tools'>Python, REST, Lettuce BDD framework</p>
+        <p class='tools'>Python, Python-Requests, REST, Lettuce BDD framework, Gherkin</p>
+
 
 
         <h3>USGS/CIDA: NGWMN Groundwater Service extension &mdash; July 2013</h3>
@@ -70,6 +100,7 @@
         <p class='tools'>Java Spring, OGC SOS specification, Google Docs</p>
         
         
+        
         <h3>USGS/CIDA: Automated Installer for WDNR Fish Mobile AppDecember 2013 to January 2014</h3>
         <p class='role'>Developer, Researcher</p>
         <p>
@@ -79,6 +110,7 @@
         Very interesting (and oddly rewarding) project.
         </p>
         <p class='tools'>Python, CouchDB, REST, Python Requests, Windows cmd.exe</p>
+        
         
         
         <h3>USGS/CIDA: Technical Debt containment advocacy &mdash; April 2013 to March 2015</h3>
@@ -91,6 +123,8 @@
         </p>
         <p class='tools'>Google Presentations, email, stand &amp; deliver</p>
 
+
+
         <h3>USGS/CIDA: Water Quality Portal rewrite &mdash; May 2013 to July 2014</h3>
         <p class='role'>Architect/Designer, Developer</p>
         <p>
@@ -100,6 +134,8 @@
         Built high-performance multiformat SAX aggregator for XML content from multiple HTTP response streams.
         </p>
         <p class='tools'>Java, XML, SAX, Apache HttpClient</p>
+
+
 
 
         <h3>USGS/CIDA: WDNR Fish Mobile App BDD &mdash; February 2013 to June 2013</h3>
@@ -112,6 +148,7 @@
         <p class='tools'>Cucumber, Gherkin, PhantomJS, Java, CoffeeScript, CouchDB</p>
 
 
+
         <h3>Aurora Fashions mobile site &mdash; July 2012 to October 2012</h3>
         <p class='role'>Project Manager/Mobile Web Developer/Xpath Specialist</p>
         <p>
@@ -120,6 +157,7 @@
         Worked with HTML5 and CSS3 to control appearance and behavior of resulting site.
         </p>
         <p class='tools'>CSS3/SASS, HTML5/HAML, Tritium transformation language, JavaScript</p>
+
 
 
         <h3>ALICE Law search website &mdash; June and July 2012</h3>
@@ -132,6 +170,7 @@
         <p class='tools'>Ruby on Rails, Python, HTML5/HAML, CSS3/SASS</p>
 
 
+
         <h3>American Family Insurance: Financial Data Warehousing &mdash; Sept 2011 to March 2012</h3>
         <p class='role'>Data Architect</p>
         <p>
@@ -140,6 +179,7 @@
         Worked with Project Management to define workflow and goals.
         </p>
         <p class='tools'>Enterprise Architect, Visio</p>
+
 
 
         <h3>TDS Telecommunications: Enterprise Java Support &mdash; June 2011 to August 2011</h3>
@@ -153,6 +193,7 @@
         <p class='tools'>Java, Linux, Oracle, SQL Developer, Spring, Eclipse, JBoss, Python</p>
 
 
+
         <h3>State of WI, ETF: Java Framework Evaluation and Component Architecture &mdash; October 2010 to May 2011</h3>
         <p class='role'>Senior Developer/SOA Architect</p>
         <p>
@@ -164,12 +205,16 @@
         <p class='tools'>Java, Spring, Struts, RAD/Websphere, MyBatis, XML Schema, XSLT, Python</p>
 
 
+
+
         <h3>State of WI, OJA: Distribution Monitoring Application &mdash; February 2010 to October 2010</h3>
         <p class='role'>Graphic Designer/Technical Developer</p>
         <p>
         Designed and developed a monitoring and display application to display operational status of a mission-critical traffic citation distribution/forwarding application.
         </p>
         <p class='tools'>XQuery, eXist, oXygen XML Editor, XSLT, CSS</p>
+
+
 
         <h3>State of WI, OJA: "SSAF" Simple Information Sharing Application &mdash; April 2008 to May 2010</h3>
         <p class='role'>Specification Author/Implementation Designer/Project Lead/Developer</p>
@@ -182,12 +227,14 @@
         <p class='tools'>XML Schema, REST, SOAP, Java, Python</p>
 
 
+
         <h3>Voter Legal Support Google Maps Application &mdash; October and November 2008</h3>
         <p class='role'>Designer/Developer/Host/Operational Support</p>
         <p>
         Designed, developed, and deployed a Google Maps application that provided color and size coding of polling locations (for various factors that flagged each place's likelihood of requiring legal assistance for voters), parametric selection of displayed polls, and drill-down to detailed information on any displayed polling place. 
         </p>
         <p class='tools'>Google Maps API, JavaScript, XHTML/CSS</p>
+
 
 
         <h3>State of WI, OJA: Electronic Citation Distribution Application &mdash; September 2007 to March 2008</h3>
@@ -201,6 +248,7 @@
         <p class='tools'>XML, REST, XQuery, eXist XML database, oXygen XML editor, XSLT, CSS</p>
 
 
+
         <h3>State of WI, OJA: Disclosure Control Language and Framework &mdash; April 2006 to February 2009</h3>
         <p class='role'>Language and Framework Primary Developer/Project Lead</p>
         <p>
@@ -209,6 +257,7 @@
         Designed a higher level graph-based language on top of RDF for unbreakable rule formulations.
         </p>
         <p class='tools'>RDF, EBNF, Graph Theory mathematics, Python, Java</p>
+
 
 
         <h3>State of WI, OJA: "Gateway" Disparately Sourced Data Search/ Retrieval Application &mdash; November 2005 to August 2007</h3>
@@ -223,6 +272,7 @@
         <p class='tools'>Java, Hibernate, XML, XML Schema, SAX, Python
 
 
+
         <h3>State of WI, CCAP: "SLAM" Layout Language and Metalanguage Design and Implementation &mdash; October 2005</h3>
         <p class='role'>Language Designer/Implementor/Project Lead</p>
         <p>
@@ -231,6 +281,7 @@
         Designed a higher-level "metalanguage" to denote frequently-recurring elements.
         </p>
         <p class='tools'>XML, CSS 2.1, XSLT</p>
+
 
 
         <h3>State of WI, CCAP: Configuration Server API Specification &mdash; August 2005 to September 2005</h3>
@@ -242,6 +293,7 @@
         <p class='tools'>URI, XML</p>
 
 
+
         <h3>State of WI, CCAP: Versioned Database Descriptor Architecture &mdash; June 2005 to August 2005</h3>
         <p class='role'>Information Architect/Component Model Designer</p>
         <p>
@@ -250,6 +302,7 @@
         Defined a simple component model to interoperate between State descriptors, Change Descriptors, and actual database instances.
         </p>
         <p class='tools'>XML, DDL, SQL</p>
+
 
 
         <h3>State of WI, CCAP: Production Support Enhancement &mdash; September 2004 to September 2005</h3>
@@ -264,6 +317,7 @@
         <p class='tools'>Java, Python, XML, SQL</p>
 
 
+
         <h3>State of WI, CCAP: E-Filing Message Handling applications &mdash; November 2004 to April 2005</h3>
         <p class='role'>Architect/Designer/Specification Author</p>
         <p>
@@ -276,13 +330,15 @@
         <p class='tools'>Java, RDF, XML, XSLT, SMTP</p>
 
 
+
         <h3>State of WI, CCAP: Various Projects  &mdash; May 2003 to December 2004</h3>
         <p class='role'>Developer/Maintainer/Designer</p>
         <p>
         Performed maintenance on queue-based messaging systems.<br/>
         Diagnosed the incompatibility between the fundamental concepts of dates and times as year/month/day/hour/minute on the one hand, and the (Java standard) millisecond stream on the other. Designed and built a package of value classes that avoided the problem, while providing comparable date.
         </p>
-        <p class='tools'>Java URI/URL, XML RDF Java, XML</p>
+        <p class='tools'>Java URI/URL, XML, RDF</p>
+
 
 
         <h3>Beacon Technologies: Workflow Management Application &mdash; November 2002 to February 2003</h3>
@@ -295,12 +351,14 @@
         <p class='tools'>XML, XML Schema, XSLT, Java</p>
 
 
+
         <h3>SBSA: Vehicle Repair Invoice Entry and Management &mdash; September 2002 to December 2002</h3>
         <p class='role'>Analyst/Designer/Programmer</p>
         <p>
         Designed and implemented a Web front end for real-time invoice entry and general invoice status tracking. Requirements included fast query execution, low server load, and strict data confidentiality.
         </p>
         <p class='tools'>JavaScript, XML, CSS, XHTML, ASP, MS SQL Server</p>
+
 
 
         <h3>CUNA Mutual Insurance: Insurance/Finance application &mdash; Jan 2001 to August 2002</h3>
@@ -316,12 +374,14 @@
         <p class='tools'>ASP, HTML/CSS, XML, XSLT, JavaScript, VB6, Java, DB2, MQ-Series, JSP, ASP, XPath, XSLT, Lotus Notes</p>
 
 
+
         <h3>American Family Insurance: Web Based Enterprise Application and Staff Performance Award &mdash; September 2000 to December 2000</h3>
         <p class='role'>Designer/Developer</p>
         <p>
         Built an internally complex application with a simple web navigational interface.
         </p>
         <p class='tools'>ASP, JavaScript, HTML/CSS, Oracle 8i, IIS</p>
+
 
 
         <h3>GE Medical: Service/Web Based Applications - April 2000 to August 2000</h3>
@@ -333,6 +393,7 @@
         <p class='tools'>ASP, HTML, IIS, Java, JavaScript, JSP, SOAP, SQL, SQL Server, VBScript, Windows NT Server, XML</p>
 
 
+
         <h3>Cap Gemini Consulting: various projects &mdash; June 1999 to March 2000</h3>
         <p class='role'>Developer/Designer/Trainer</p>
         <p>
@@ -341,6 +402,7 @@
         Web Services researcher.
         </p>
         <p class='tools'>TextPad, Sybase, PowerPoint</p>
+
 
 
         <h3>InterMedia LLC: Student Information Systems &mdash; June 1997 to June 1999</h3>
