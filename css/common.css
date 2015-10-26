@@ -81,6 +81,13 @@
         font-weight: bold;
     }
     
+    .attn   
+    {
+        font-weight: bold;
+        color: #308070;
+    }
+    
+    
     .banner
     {
         color: #772200;
