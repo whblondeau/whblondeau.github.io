@@ -45,6 +45,19 @@
         margin-right: auto;
         font-size: 17px;  /* for resumes etc */
     }
+    
+    div.summary
+    {
+        font-style: italic;
+        font-size: 19px;
+        margin-top: 3em;
+        margin-bottom: 3em;
+    }
+    
+    div.summary p
+    {
+    
+    }
 
     .article p, .article li
     {
