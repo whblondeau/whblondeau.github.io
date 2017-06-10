@@ -59,6 +59,20 @@
     
     }
 
+    .announcement
+    {
+        border-style: solid;
+        border-width: 1px;
+        border-color: #772200;
+
+        background-color: #ffe8dd;
+
+        margin: 1em 0em 2em 0em;
+        padding: 1em 2em;
+
+        font-size: 19px;
+    }
+
     .article p, .article li
     {
         font-family: Helvetica, Arial, sans-serif;
