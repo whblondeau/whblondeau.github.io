@@ -1,7 +1,7 @@
 
     body
     {
-        margin: 60px 20px;
+        margin: 60px 20px 100% 60px;
         font-family: "Trebuchet MS", Helvetica, sans-serif;
     }
     
@@ -68,7 +68,7 @@
         background-color: #ffe8dd;
 
         margin: 1em 0em 2em 0em;
-        padding: 1em 2em;
+        padding: 1.6em 2em;
 
         font-size: 19px;
     }
