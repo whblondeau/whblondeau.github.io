@@ -7,11 +7,11 @@
 <body>
     <div class='wrapper'>
         <p>
-        <a href='http://billblondeau.com'>billblondeau.com</a> home
+        <a href='../index.htm'>home</a>
         </p>
         <p class='instruct'>If your workflow requires a copy of this history, the simplest way is to copy everything below the line and paste it into a Word doc. If you would prefer that I generate one for you, email me at <a href='mailto:whblondeau@gmail.com'>whblondeau@gmail.com</a>. I'll happily and promptly send it.</p>
         <hr/>
-        <h1>Bill Blondeau Software Project History</h1>
+        <h1>Bill Blondeau Software Position &amp; Project History</h1>
         <div class='contact-info'>
             <p>Bill Blondeau</p>
             <p>122 N. 6th St.</p>
@@ -20,6 +20,36 @@
             <p><a href='http://billblondeau.com'>http://billblondeau.com</a></p>
             <p>References upon request.</p>
         </div>
+
+        
+        <a name='webcourseworks'></a>
+        <h3>Web Courseworks: <code>DevOps</code> Software deployment to Staging  &mdash; January 2018 to present</h3>
+        <p class='role'>DevOps</p>
+        <p>
+        Web Courseworks maintains numerous GitHub repositories for several products. These all need to have new features and bugfixes applied; also, changes to the more general feature repositories need to be propagated to customized repos. Changes must then be pushed to the corresponding Staging servers for testing.
+        </p>
+        <p>
+        Code merges involve GitHub Pull Requests, scripted git commands, and manual sequences of git commands. This is followed by deployment to various hosting services, including Amazon Web Services. Pre-deploy database backups are often required. Often, several merge/push operations occur simultaneously.
+        </p>
+        <p>
+        I've done the majority of these operations for Web Courseworks for over a year. To keep this critical sequence of operations in order, keep things from falling through the cracks, and provide summary reports of actions taken, I wrote several Python utilities, which have proven to be indispensable.
+        </p>
+        <p class='tools'>git, GitHub, ssh, Ansible, MySQL, AWS, Python, vim</p>
+
+        
+        <a name='webcourseworks'></a>
+        <h3>Web Courseworks: <code>PHP Developer</code> CourseStage Learning Management System  &mdash; December 2017 to present</h3>
+        <p class='role'>Developer</p>
+        <p>
+        CourseStage is Web Courseworks's flagship product. It is a software as a service application built on top of <a href='https://moodle.org/'>Moodle</a>, a worldwide open source Learning Management System project.
+        </p>
+        <p>
+        CourseStage is a very large monolithic object-oriented PHP application. The underlying Moodle codebase was from the beginning optimized for plugin-based extensibility. As a consequence, there is a heavy emphasis on in-application frameworks to standardize common operations. The database does not enforce referential integrity (another plugin optimization), so the application has to do so.
+        </p>
+        <p>
+        All in all, challenging and interesting work.
+        </p>
+        <p class='tools'>PHP, git, GitHub, NetBeans, MySQL, VirtualBox, elasticsearch, JavaScript</p>
 
         <a name='jnpath'></a>
         <h3>Independent project <code>JNPath</code> (ongoing since June 2017)</h3>
@@ -37,7 +67,7 @@
 
         
         <a name='rabble-musicat'></a>
-        <h3>Rabble: <code>MUSICat</code> local music curation for public libraries  &mdash; May 2016 to present</h3>
+        <h3>Rabble: <code>MUSICat</code> local music curation for public libraries  &mdash; May 2016 to November 2017</h3>
         <p class='role'>Developer, Devops, Data Mechanic</p>
         <p>
         MUSICat is a hosted web app for managing collections of music. It's explicitly designed and built for public libraries. It provides essential capabilities: 
@@ -54,7 +84,7 @@
         MUSICat is a single page web app. The front end is implemented in Ember JS and Node JS; the back end is NodeJS and Redis, hosted on a Google Compute Engine Debian server.
         </p>
         <p>
-        Current examples of live MUSICat sites:
+        Examples of live MUSICat sites:
         </p>
         <ul>
             <li><a href='https://capitalcityrecords.ca/' target='_blank'>Capital City Records</a>, Edmonton Public Library</li>
