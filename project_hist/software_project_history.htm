@@ -51,6 +51,45 @@
         </p>
         <p class='tools'>PHP, git, GitHub, NetBeans, MySQL, VirtualBox, elasticsearch, JavaScript</p>
 
+        <a name='marcout'></a>
+        <h3>MARCout bibliographic export (November 2017 to January 2018)</h3>
+        <p class='role'>Designer, Developer</p>
+        <p>
+        The <a href='http://www.loc.gov/marc/bibliographic/'>MARC 21 format</a> is a bibliographic data representation standard published by the Library of Congress. Despite its difficult aspects (it's old, it goes back to times when information was expensive to store and represent, and its implementations are often inconsistently complete&mdash;the joke goes, "MARC is already here, it's just not evenly distributed yet"), MARC 21 is deeply embedded in library information systems everywhere.
+        </p>
+        <p>
+        This project was requested by Rabble as a more robust means of providing MARC21 bibliographic exports of Rabble customers' MUSICat music catalogs. The primary purpose was for the customers to extract bibliographic information from their MUSICat instance, and import it into their own main library catalogs. Important additional uses include the ability to provision shared catalogs.
+        </p>
+        <p>
+        Since the customers wanted various combinations and sequences of MARC elements in their import records, using various serializations&mdash;MARC, like many well-established open standards, breeds idiosyncratic patterns of usage&mdash;Rabble and I settled on a three-part design:
+        </p>
+        <ul>
+            <li>A reasonably human-friendly Domain-Specific Language, called "MARCout", that bibliographers could use for specifying desired sequences of MARC elements and the transforms to be applied to the content.</li>
+            <li>A MARCout component that would:
+                <ul> 
+                    <li>parse a MARCout document;</li>
+                    <li>self-configure from the parsed MARCout;</li>
+                    <li>convert an output record to the stipulated MARC datastructure;</li>
+                    <li>serialize the MARC output in several formats (including the mildly notorious <a href='https://en.wikipedia.org/wiki/ISO_2709'>ISO 2709</a> byte-oriented format);</li>
+                </ul>
+            </li>
+            <li>A Web Service wrapper that would isolate MUSICat from the implementation details of the MARCout component.</li>
+        </ul>
+        <p>
+        The component was implemented in Python (nothing else would have been expressive and comprehensible enough for my short deadline). The Webservice was written in Flask. I also wrote&mdash;directly into Rabble's codebase&mdash;the NodeJS client code with which they could call the Web Service and export the result.
+        </p>
+        <p>
+        The project turned out to be highly successful (especially for a rush job in off hours), allowing Rabble to affordably provide the desired customizable MARC21 exports to customers with varying MARC21 composition, format, and serialization requirements.
+        </p>
+        <p>
+        Now if I can just get a couple of the Rabble devs to send me some pull requests for fixes and enhancements they've implemented...
+        </p>
+        <p>
+        This project is at <a href='https://github.com/whblondeau/marcout' target='_blank'>https://github.com/whblondeau/marcout</a>. It includes <a href='https://github.com/whblondeau/marcout/blob/master/examples/export_define.marcout'>an example MARCout file</a>.
+        </p>
+        <p class='tools'>Python, Flask, linux CLI, git, NodeJS for client code</p>
+
+
         <a name='jnpath'></a>
         <h3>Independent project <code>JNPath</code> (ongoing since June 2017)</h3>
         <p class='role'>Language Designer, Developer</p>
